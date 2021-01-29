@@ -35,7 +35,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
               Draggable(
                 child: Card(child: Text('time'),),
                 feedback: Card(child: Text('time'),),
-                data: TimeTag(time: '11:00') as Insertable,
+                data: TimeTag.nullTag as Insertable,
               ),
             ],
           ),
@@ -109,10 +109,8 @@ class _BuildDayPageState extends State<BuildDayPage> {
           },
           itemBuilder: (context, page) {
             if (page < widget.travel.days.length) {
-              return Stack(
-                  children: <Widget>[
-                    BlockTower(destinationList: widget.travel.days[page], onEditMode: true,),
-                  ]
+              return Center(
+                  child: BlockTower(destinationList: widget.travel.days[page], onEditMode: true,),
               );
             }
             else
@@ -235,6 +233,8 @@ class BlockTower extends StatefulWidget {
 class _BlockTowerState extends State<BlockTower> {
   static final double _blockWidth = 200;
   static final double _blockHeight = 60;
+  static final double _tagWidth = 60;
+  static final double _tagHeight = 30;
   static final double _intervalHeight = 20;
   static final double _intervalHeightWide = 40;
 
@@ -290,54 +290,48 @@ class _BlockTowerState extends State<BlockTower> {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
-        Row(
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: result
-            ),
-            _buildTimeTagColumn(),
-          ],
+          children: result
         ),
         _makeRemoveBar(),
       ],
-    );
-  }
-  Widget _buildTimeTagColumn(){
-    List<Widget> result = [];
-
-    for(int i=0; i<=widget._destinationList.length; i++)
-      result.add(Container(width: 10, height: _intervalHeight, color: Colors.black12,));
-
-    return Container(
-      height: (_blockHeight + _intervalHeight) * widget._destinationList.length + _intervalHeight,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: result,
-      ),
-    );
+     );
   }
 
   Widget _makeBlock({@required final int index}){
     // 블럭 Widget
     Destination des = widget._destinationList[index];
-    return Container(
-        width: _blockWidth,
-        height: _blockHeight,
-        color: Colors.orange,
-        child: Text(des.name),
-      );
-  }
-  Widget _makeTimeTag(){
-    return Container(width: 60, height: 40,);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          width: _blockWidth,
+          height: _blockHeight,
+          color: Colors.orange,
+          child: Text(des.name),
+        ),
+        Container(
+          width: _tagWidth,
+          height: _tagHeight,
+          color: widget._destinationList[index].timeTag == TimeTag.nullTag
+              ? null
+              : Colors.blue,
+          child: Text(
+              widget._destinationList[index].timeTag == TimeTag.nullTag
+                  ? ''
+                  : widget._destinationList[index].timeTag.time0),
+        )
+      ],
+    );
   }
   Widget _makeInterval({@required final int index}){
     // 블럭 사이 공간에 넣을 DragTarget
     return DragTarget(
       builder: (context, List<Insertable> candidateData, rejectData){
         return Container(
-          width: _blockWidth,
+          width: _blockWidth + _tagWidth,
           height: _onWillAcceptIndex == index
               ? _intervalHeightWide
               : _intervalHeight,
@@ -374,6 +368,14 @@ class _BlockTowerState extends State<BlockTower> {
             break;
 
           case TimeTag:
+            setState(() {
+              if (data == TimeTag.nullTag) {
+                // 새 태그를 추가하는 경우
+                String timeText = "11:00";
+                widget._destinationList[index].timeTag = TimeTag(time: timeText);
+              }
+              _onWillAcceptIndex = -1;
+            });
             break;
         }
       },

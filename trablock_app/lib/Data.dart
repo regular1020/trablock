@@ -28,16 +28,18 @@ class Destination extends Insertable{
   // 각각의 여행지.
   String name;
   String address;
+  TimeTag timeTag = TimeTag.nullTag;
 
   Destination(this.name);
 }
 
 class TimeTag extends Insertable{
   // Destination 시작과 끝의 시간 정보(Optional)
+  static final TimeTag nullTag = TimeTag(time: null);
   String time0;
   String time1;
 
-  TimeTag({@required String time, String timeExtra = ''})
+  TimeTag({@required String time, String timeExtra})
       : time0 = time,
         time1=timeExtra;
 }
