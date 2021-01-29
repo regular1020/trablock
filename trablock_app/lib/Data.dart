@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 Travel _testTravel(){
   // 테스트용
   Travel res = Travel('test');
-  res.days = [[Destination('aaaa'), Destination('bbbb')],[Destination('Seoul'),Destination('Busan')]];
+  res.days = [[Destination('Gyeongbokgung',LatLng(37.576267, 126.976912)), Destination('Seoul Station', LatLng(37.555078,126.970702))],[Destination('Gangnam', LatLng(37.498095,127.027610)),Destination('63 building', LatLng(37.310976,126.562476))]];
   return res;
 }
 
@@ -27,9 +28,10 @@ class Insertable {
 class Destination extends Insertable{
   // 각각의 여행지.
   String name;
-  String address;
+  LatLng address; //여행지의 좌표
 
-  Destination(this.name);
+
+  Destination(this.name, this.address);
 }
 
 class TimeTag extends Insertable{
