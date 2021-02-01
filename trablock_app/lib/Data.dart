@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 Travel _testTravel(){
@@ -20,21 +22,47 @@ class Travel {
   Travel(this.title);
 }
 
-class Insertable {
+abstract class Insertable {
   // 블럭 사이에 입력 가능한 객체
+  Widget getWidget({bool whenDragging = false});
 }
 
 class Destination extends Insertable{
   // 각각의 여행지.
+  static final double widgetWidth = 200;
+  static final double widgetHeight = 60;
+
   String name;
   String address;
   TimeTag timeTag = TimeTag.nullTag;
 
-  Destination(this.name);
+  List<int> blockColor = [0, 0, 0];
+
+  Destination(this.name) {
+    Random _random = Random();
+    blockColor[0] = _random.nextInt(206) + 50;
+    blockColor[1] = _random.nextInt(206) + 50;
+    blockColor[2] = _random.nextInt(206) + 50;
+  }
+
+  @override
+  Widget getWidget({whenDragging = false}) {
+    return Container(
+      width: widgetWidth,
+      height: widgetHeight,
+      color: whenDragging
+          ? Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 0.3)
+          : Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 1),
+      child: Text(name),
+    );
+  }
 }
 
-class TimeTag extends Insertable{
+class TimeTag implements Insertable{
   // Destination 시작과 끝의 시간 정보(Optional)
+  static final double widgetWidth = 60;
+  static final double widgetHeight = 30;
+
   static final TimeTag nullTag = TimeTag(time: null);
   String time0;
   String time1;
@@ -42,4 +70,24 @@ class TimeTag extends Insertable{
   TimeTag({@required String time, String timeExtra})
       : time0 = time,
         time1=timeExtra;
+  TimeTag.copy(TimeTag timeTag)
+      : this(time: timeTag.time0, timeExtra: timeTag.time1);
+
+  @override
+  Widget getWidget({whenDragging = false}) {
+    return Container(
+      width: widgetWidth,
+      height: this == nullTag
+          ? 0
+          : widgetHeight,
+      color: this == TimeTag.nullTag
+          ? null
+          : Colors.blue,
+      child: Text(
+          this == TimeTag.nullTag
+              ? ''
+              : time0
+      ),
+    );
+  }
 }

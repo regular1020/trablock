@@ -231,10 +231,6 @@ class BlockTower extends StatefulWidget {
 }
 
 class _BlockTowerState extends State<BlockTower> {
-  static final double _blockWidth = 200;
-  static final double _blockHeight = 60;
-  static final double _tagWidth = 60;
-  static final double _tagHeight = 30;
   static final double _intervalHeight = 20;
   static final double _intervalHeightWide = 40;
 
@@ -268,22 +264,7 @@ class _BlockTowerState extends State<BlockTower> {
 
     for(int i=0; i<widget._destinationList.length; i++){
       result.add(_makeInterval(index: i));
-      result.add(Draggable(
-        child: _makeBlock(index: i),
-        feedback: _makeBlock(index: i),
-        childWhenDragging: Container(),
-        data: widget._destinationList[i] as Insertable,
-        onDragStarted: () {
-          setState(() {
-            _onDragWidget = widget;
-          });
-        },
-        onDragEnd: (details) {
-          setState(() {
-            _onDragWidget= null;
-          });
-        },
-      ));
+      result.add(_makeBlock(index: i));
     }
     result.add(_makeInterval(index: widget._destinationList.length));
 
@@ -302,27 +283,43 @@ class _BlockTowerState extends State<BlockTower> {
   Widget _makeBlock({@required final int index}){
     // 블럭 Widget
     Destination des = widget._destinationList[index];
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: _blockWidth,
-          height: _blockHeight,
-          color: Colors.orange,
-          child: Text(des.name),
+        Draggable(
+          child: des.getWidget(),
+          feedback: des.getWidget(),
+          childWhenDragging: des.getWidget(whenDragging: true),
+          data: des as Insertable,
+          onDragStarted: () {
+            setState(() {
+              _onDragWidget = widget;
+            });
+          },
+          onDragEnd: (details) {
+            setState(() {
+              _onDragWidget= null;
+            });
+          },
         ),
-        Container(
-          width: _tagWidth,
-          height: _tagHeight,
-          color: widget._destinationList[index].timeTag == TimeTag.nullTag
-              ? null
-              : Colors.blue,
-          child: Text(
-              widget._destinationList[index].timeTag == TimeTag.nullTag
-                  ? ''
-                  : widget._destinationList[index].timeTag.time0),
-        )
+        Draggable(
+          child: des.timeTag.getWidget(),
+          feedback: des.timeTag.getWidget(),
+          childWhenDragging: des.timeTag.getWidget(whenDragging: true),
+          data: des.timeTag as Insertable,
+          onDragStarted: () {
+            setState(() {
+              _onDragWidget = widget;
+            });
+          },
+          onDragEnd: (details) {
+            setState(() {
+              _onDragWidget= null;
+            });
+          },
+        ),
       ],
     );
   }
@@ -331,10 +328,10 @@ class _BlockTowerState extends State<BlockTower> {
     return DragTarget(
       builder: (context, List<Insertable> candidateData, rejectData){
         return Container(
-          width: _blockWidth + _tagWidth,
+          width: Destination.widgetWidth + TimeTag.widgetWidth,
           height: _onWillAcceptIndex == index
-              ? _intervalHeightWide
-              : _intervalHeight,
+            ? _intervalHeightWide
+            : _intervalHeight,
           color: Colors.black,
         );
       },
@@ -346,37 +343,58 @@ class _BlockTowerState extends State<BlockTower> {
         _onWillAcceptIndex = -1;
       },
       onAccept: (data){
-        switch (data.runtimeType) {
-          case Destination:
-            setState(() {
-              if (_onDragWidget == null){
-                // 새 블럭을 추가하는 경우
-                widget._destinationList.insert(index, data);
-              } else if (_onDragWidget == widget) {
-                // 도달한 부분 일자와 출발한 부분 일자가 동일한 경우
-                int position = _onDragWidget._destinationList.indexOf(data);
-                _onDragWidget._destinationList.removeAt(position);
-                index > position
-                  ? widget._destinationList.insert(index - 1, data)
-                  : widget._destinationList.insert(index, data);
-              } else {
-                _onDragWidget._destinationList.remove(data);
-                widget._destinationList.insert(index, data);
-              }
-              _onWillAcceptIndex = -1;
-            });
-            break;
-
-          case TimeTag:
-            setState(() {
-              if (data == TimeTag.nullTag) {
-                // 새 태그를 추가하는 경우
-                String timeText = "11:00";
-                widget._destinationList[index].timeTag = TimeTag(time: timeText);
-              }
-              _onWillAcceptIndex = -1;
-            });
-            break;
+        if(data is Destination) {
+          setState(() {
+            if (_onDragWidget == null){
+              // 새 블럭을 추가하는 경우
+              widget._destinationList.insert(index, data);
+            } else if (_onDragWidget == widget) {
+              // 도달한 부분 일자와 출발한 부분 일자가 동일한 경우
+              int position = _onDragWidget._destinationList.indexOf(data);
+              _onDragWidget._destinationList.removeAt(position);
+              index > position
+                ? widget._destinationList.insert(index - 1, data)
+                : widget._destinationList.insert(index, data);
+            } else {
+              _onDragWidget._destinationList.remove(data);
+              widget._destinationList.insert(index, data);
+            }
+            _onWillAcceptIndex = -1;
+          });
+        } else if(data is TimeTag) {
+          setState(() {
+            if (_onDragWidget == null) {
+              TextEditingController _controller = TextEditingController();
+              String tagString;
+              // 새 태그를 추가하는 경우
+              showDialog(
+                context: context,
+                builder:(BuildContext context) {
+                  return AlertDialog(
+                    content: Column(
+                      children: <Widget>[
+                        TextField(controller: _controller,)
+                      ],
+                    ),
+                    actions: <Widget>[
+                      FlatButton(onPressed: () {Navigator.pop(context, _controller.text);}, child: Text("ok")),
+                      FlatButton(onPressed: () {Navigator.pop(context, "");}, child: Text("close")),
+                    ],
+                  );
+                }
+              ).then((value) {setState(() {
+                if(value != "")
+                  widget._destinationList[index].timeTag = TimeTag(time: value);
+              });});
+            } else {
+              for(int i=0; i<_onDragWidget._destinationList.length; i++)
+                if(_onDragWidget._destinationList[i].timeTag == data)
+                  _onDragWidget._destinationList[i].timeTag = TimeTag.nullTag;
+              widget._destinationList[index].timeTag = TimeTag.copy(data);
+              data = TimeTag.nullTag;
+            }
+            _onWillAcceptIndex = -1;
+          });
         }
       },
     );
@@ -397,13 +415,15 @@ class _BlockTowerState extends State<BlockTower> {
         );
       },
       onAccept: (data) {
-        switch (data.runtimeType) {
-          case Destination:
-            _onDragWidget._destinationList.remove(data);
-            break;
-
-          case TimeTag:
-            break;
+        if(data is Destination) {
+          _onDragWidget._destinationList.remove(data);
+        }
+        else if (data is TimeTag) {
+          for (int i = 0; i < _onDragWidget._destinationList.length; i++)
+            if (_onDragWidget._destinationList[i].timeTag == data) {
+              _onDragWidget._destinationList[i].timeTag = TimeTag.nullTag;
+              break;
+            }
         }
       },
     );
