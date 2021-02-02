@@ -25,8 +25,7 @@
     <list default="true" id="2cafd32d-8a38-40b6-8dce-8e6114378321" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trablock_app/lib/Data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/trablock_app/lib/Data.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trablock_app/lib/EditPlan.dart" beforeDir="false" afterPath="$PROJECT_DIR$/trablock_app/lib/EditPlan.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trablock_app/lib/SearchMap.dart" beforeDir="false" afterPath="$PROJECT_DIR$/trablock_app/lib/SearchMap.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trablock_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/trablock_app/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,30 +113,30 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="371" y="130" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1280.680@0.0.1280.680" timestamp="1611234484798" />
-    <state x="93" y="93" width="1095" height="495" key="AVDManager" timestamp="1612231428964">
+    <state x="93" y="93" width="1095" height="495" key="AVDManager" timestamp="1612256372674">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="93" y="93" width="1095" height="495" key="AVDManager/0.0.1280.680@0.0.1280.680" timestamp="1612231428964" />
+    <state x="93" y="93" width="1095" height="495" key="AVDManager/0.0.1280.680@0.0.1280.680" timestamp="1612256372674" />
     <state x="421" y="95" key="FileChooserDialogImpl" timestamp="1611232284206">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="95" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1611232284206" />
-    <state width="1236" height="160" key="GridCell.Tab.0.bottom" timestamp="1611795715863">
+    <state width="1236" height="160" key="GridCell.Tab.0.bottom" timestamp="1612244256593">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1236" height="160" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1611795715863" />
-    <state width="1236" height="160" key="GridCell.Tab.0.center" timestamp="1611795715863">
+    <state width="1236" height="160" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1612244256593" />
+    <state width="1236" height="160" key="GridCell.Tab.0.center" timestamp="1612244256593">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1236" height="160" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1611795715863" />
-    <state width="1236" height="160" key="GridCell.Tab.0.left" timestamp="1611795715863">
+    <state width="1236" height="160" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1612244256593" />
+    <state width="1236" height="160" key="GridCell.Tab.0.left" timestamp="1612244256593">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1236" height="160" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1611795715863" />
-    <state width="1236" height="160" key="GridCell.Tab.0.right" timestamp="1611795715863">
+    <state width="1236" height="160" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1612244256593" />
+    <state width="1236" height="160" key="GridCell.Tab.0.right" timestamp="1612244256593">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1236" height="160" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1611795715863" />
+    <state width="1236" height="160" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1612244256593" />
     <state x="142" y="0" key="SettingsEditor" timestamp="1611232461429">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -54,7 +54,14 @@ class _MainRouteState extends State<MainRoute> {
                 // Upadte the state of the app
                 // 제거할 일정 선택하는 기능
                 Navigator.pop(context);
-
+                setState(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DeleteTravel(),
+                    ),
+                  );
+                });
               },
             ),
             ListTile(
@@ -150,6 +157,81 @@ class TravelListView extends StatelessWidget{
       itemBuilder: (BuildContext context, int index){
         return TravelTile(myTravelList[index]);
       },
+    );
+  }
+}
+
+class DeleteTravel extends StatefulWidget {
+  @override
+  _DeleteTravelState createState() => _DeleteTravelState();
+}
+
+class _DeleteTravelState extends State<DeleteTravel> {
+  List<Travel> deleteList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('일정 삭제'),
+      ),
+      body: Container(
+        padding: new EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            new Expanded(
+              child: ListView.builder(
+                padding: new EdgeInsets.symmetric(vertical: 8.0),
+                itemCount: myTravelList.length,
+                itemBuilder: (BuildContext context, int index){
+                  return selectableTravelList(myTravelList[index]);
+                },
+              ),
+            ),
+            RaisedButton(
+              child: Text('제거'),
+              onPressed: (){
+                setState(() {
+                  for (Travel t in deleteList){
+                    myTravelList.remove(t);
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainRoute(),
+                    ),
+                  );
+                });
+              }
+            )
+          ],
+        )
+      )
+    );
+  }
+
+  ListTile selectableTravelList(Travel _travel){
+    return ListTile(
+      title: new Row(
+        children: <Widget>[
+          new Expanded(child: Text(_travel.title)),
+          new Checkbox(
+              value: _travel.isSelected,
+              onChanged: (bool value) {
+                setState(() {
+                  _travel.isSelected = value;
+                  if (_travel.isSelected == true){
+                    deleteList.add(_travel);
+                  }
+                  else {
+                    deleteList.remove(_travel);
+                  }
+                });
+              }
+          )
+        ],
+      ),
     );
   }
 }
