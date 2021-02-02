@@ -31,7 +31,32 @@ class Destination extends Insertable{
   LatLng address; //여행지의 좌표
 
 
+<<<<<<< Updated upstream
   Destination(this.name, this.address);
+=======
+  Destination({@required String name, LatLng address}) {
+    this.name = name;
+    if(address != null)
+      {
+        this.address = address;
+      }
+    Random _random = Random();
+    blockColor[0] = _random.nextInt(206) + 50;
+    blockColor[1] = _random.nextInt(206) + 50;
+    blockColor[2] = _random.nextInt(206) + 50;
+  }
+  @override
+  Widget getWidget({whenDragging = false}) {
+    return Container(
+      width: widgetWidth,
+      height: widgetHeight,
+      color: whenDragging
+          ? Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 0.3)
+          : Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 1),
+      child: Text(name),
+    );
+  }
+>>>>>>> Stashed changes
 }
 
 class TimeTag extends Insertable{
