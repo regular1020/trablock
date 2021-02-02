@@ -46,7 +46,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
                 child: Card(child: Text('block'),),
                 feedback: Card(child: Text('block'),),
                 childWhenDragging: Container(),
-                data: Destination('name', LatLng(0,0)) as Insertable,
+                data: Destination(name: 'test', address: LatLng(0,0)) as Insertable,
               ),
               Draggable(
                 child: Card(child: Text('time'),),

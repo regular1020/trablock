@@ -87,7 +87,7 @@ class _SearchMapState extends State<SearchMap> {
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
 
-      travel.candidateDestination.add(Destination(placeId, LatLng(lat,lng)));
+      travel.candidateDestination.add(Destination(name: placeId, address: LatLng(lat,lng)));
     }
   }
 }
