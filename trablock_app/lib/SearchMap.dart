@@ -32,7 +32,7 @@ class _SearchMapState extends State<SearchMap> {
 
   @override
   Widget build(BuildContext context) {
-    Travel _travel = ModalRoute.of(context).settings.arguments;
+    Destination _destination = ModalRoute.of(context).settings.arguments;
     return MaterialApp(
         home: Scaffold(
           body: Stack(
@@ -64,7 +64,7 @@ class _SearchMapState extends State<SearchMap> {
                             // placeholder for our places search later
                             Prediction p = await PlacesAutocomplete.show(
                                 context: context, apiKey: kGoogleApiKey);
-                            displayPrediction(p,_travel);
+                            displayPrediction(p, _destination);
                           },
                         ),
                       ),
@@ -79,15 +79,14 @@ class _SearchMapState extends State<SearchMap> {
 
   }
 
-  Future<Null> displayPrediction(Prediction p, Travel travel) async {
+  Future<Null> displayPrediction(Prediction p, Destination d) async {
     if (p != null) {
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
 
-      var placeId = p.placeId;
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
 
-      travel.candidateDestination.add(Destination(name: placeId, address: LatLng(lat,lng)));
+      d.address = LatLng(lat, lng);
     }
   }
 }

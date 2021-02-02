@@ -49,7 +49,7 @@ class Destination extends Insertable{
 
   List<int> blockColor = [0, 0, 0];
 
-  Destination({String name, LatLng address})
+  Destination({@required String name, LatLng address})
     : this.name = name,
       this.address = address {
     Random _random = Random();
@@ -75,8 +75,8 @@ class Destination extends Insertable{
           decoration: TextDecoration.none,
           fontWeight: FontWeight.normal
         ),
-      ),
-    ));
+      ))
+    );
   }
 }
 
@@ -104,11 +104,12 @@ class TimeTag implements Insertable{
     return Container(
       width: widgetWidth,
       height: widgetHeight,
-      color: Colors.blue,
+      color: whenDragging
+          ? Colors.cyanAccent : Colors.blue,
       child: Text(
         time0,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: 15,
           color: whenDragging
             ? Colors.grey
             : Colors.black,

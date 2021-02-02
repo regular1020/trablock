@@ -18,6 +18,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
   @override
   Widget build(BuildContext context) {
     Travel _travel = ModalRoute.of(context).settings.arguments;
+    String _destinationName = '';
 
     return Scaffold(
       appBar: AppBar(
@@ -35,10 +36,40 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: (){
-                  Navigator.pushNamed(
-                    context,
-                    SearchMap.routeName,
-                    arguments: _travel,
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text('여행지 입력'),
+                          content: TextField(
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(hintText: '입력해 주세요'),
+                            onChanged: (String str) {
+                              setState(() {
+                                _destinationName = str;
+                              });
+                            },
+                          ),//입력칸 추가완료
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("확인"),
+                              onPressed: (){
+                                Navigator.pop(context);
+                                setState(() => _travel.candidateDestination.add(Destination(name: _destinationName)));
+                              },
+                            ),
+                            FlatButton(
+                              child: Text(
+                                "취소",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ],
+                        );
+                      }
                   );
                 },
               ),
@@ -46,7 +77,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
                 child: Card(child: Text('block'),),
                 feedback: Card(child: Text('block'),),
                 childWhenDragging: Container(),
-                data: Destination(name: 'test', address: LatLng(0,0)) as Insertable,
+                data: Destination(name: 'test') as Insertable,
               ),
               Draggable(
                 child: Card(child: Text('time'),),
@@ -382,6 +413,7 @@ class _BlockTowerState extends State<BlockTower> {
               // 새 태그를 추가하는 경우
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder:(BuildContext context) {
                   return AlertDialog(
                     content: Column(
