@@ -365,7 +365,6 @@ class _BlockTowerState extends State<BlockTower> {
           setState(() {
             if (_onDragWidget == null) {
               TextEditingController _controller = TextEditingController();
-              String tagString;
               // 새 태그를 추가하는 경우
               showDialog(
                 context: context,
@@ -391,7 +390,6 @@ class _BlockTowerState extends State<BlockTower> {
                 if(_onDragWidget._destinationList[i].timeTag == data)
                   _onDragWidget._destinationList[i].timeTag = TimeTag.nullTag;
               widget._destinationList[index].timeTag = TimeTag.copy(data);
-              data = TimeTag.nullTag;
             }
             _onWillAcceptIndex = -1;
           });
