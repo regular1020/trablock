@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trablock_app/Data.dart';
+import 'package:trablock_app/SearchMap.dart';
 
 class EditPlanRoute extends StatefulWidget {
   static final String routeName = '/edit';
@@ -9,6 +11,10 @@ class EditPlanRoute extends StatefulWidget {
 }
 
 class _EditPlanRouteState extends State<EditPlanRoute> {
+  //static String _destinationName = '';
+
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Travel _travel = ModalRoute.of(context).settings.arguments;
@@ -26,11 +32,21 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: (){
+                  Navigator.pushNamed(
+                    context,
+                    SearchMap.routeName,
+                    arguments: _travel,
+                  );
+                },
+              ),
               Draggable(
                 child: Card(child: Text('block'),),
                 feedback: Card(child: Text('block'),),
                 childWhenDragging: Container(),
-                data: Destination('name') as Insertable,
+                data: Destination('name', LatLng(0,0)) as Insertable,
               ),
               Draggable(
                 child: Card(child: Text('time'),),
@@ -45,7 +61,6 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
     );
   }
 }
-
 
 class BuildDayPage extends StatefulWidget {
   //여행날짜와 여행지 리스트를 입력받으면 그에 해당하는 viewpage를 생성하는 클래스

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trablock_app/Data.dart';
 import 'package:trablock_app/EditPlan.dart';
 
+import 'ShowMap.dart';
+
 // 메인화면에서 각 계획 클릭시 나타날 화면. 작성된 계획을 보기 편하게 보여줘야 할듯
 
 class ShowPlanRoute extends StatefulWidget {
@@ -51,7 +53,26 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
                   color: Colors.amber,
                   child: Column(
                     children: <Widget>[
-                      Text((page+1).toString() + "일차"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text((page+1).toString() + "일차"),
+                          IconButton(
+                            icon: Icon(Icons.map_outlined),
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(
+                                    context,
+                                    ShowMap.routeName,
+                                    arguments: _travel.days[page],
+                                );
+                              });
+                            },
+
+                          )
+                        ],
+                      ),
+
                       BlockTower(destinationList: _travel.days[page]),
                     ]
                   ),

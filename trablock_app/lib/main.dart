@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trablock_app/Data.dart';
 import 'package:trablock_app/EditPlan.dart';
+import 'package:trablock_app/SearchMap.dart';
+import 'package:trablock_app/ShowMap.dart';
 import 'package:trablock_app/showPlan.dart';
 
 void main() => runApp(MyApp());
@@ -15,6 +17,8 @@ class MyApp extends StatelessWidget {
         MainRoute.routeName: (context) => MainRoute(),
         ShowPlanRoute.routeName: (context) => ShowPlanRoute(),
         EditPlanRoute.routeName: (context) => EditPlanRoute(),
+        ShowMap.routeName: (context) => ShowMap(),
+        SearchMap.routeName: (context) => SearchMap(),
       },
     );
   }
