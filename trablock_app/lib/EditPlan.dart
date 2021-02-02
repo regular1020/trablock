@@ -347,7 +347,6 @@ class _BlockTowerState extends State<BlockTower> {
           height: _onWillAcceptIndex == index
             ? _intervalHeightWide
             : _intervalHeight,
-          color: Colors.black,
         );
       },
       onWillAccept: (data){

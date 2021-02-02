@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -50,9 +49,9 @@ class Destination extends Insertable{
 
   List<int> blockColor = [0, 0, 0];
 
-  Destination({String name, LatLng address}) {
-    this.name = name;
-    this.address = address;
+  Destination({String name, LatLng address})
+    : this.name = name,
+      this.address = address {
     Random _random = Random();
     blockColor[0] = _random.nextInt(206) + 50;
     blockColor[1] = _random.nextInt(206) + 50;
@@ -64,10 +63,20 @@ class Destination extends Insertable{
       width: widgetWidth,
       height: widgetHeight,
       color: whenDragging
-          ? Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 0.3)
-          : Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 1),
-      child: Text(name),
-    );
+        ? Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 0.3)
+        : Color.fromRGBO(blockColor[0], blockColor[1], blockColor[2], 1),
+      child: Center(child: Text(
+        name,
+        style: TextStyle(
+          fontSize: 20,
+          color: whenDragging
+            ? Colors.grey
+            : Colors.black,
+          decoration: TextDecoration.none,
+          fontWeight: FontWeight.normal
+        ),
+      ),
+    ));
   }
 }
 
@@ -80,26 +89,32 @@ class TimeTag implements Insertable{
   String time0;
   String time1;
 
+  // Default constructor
   TimeTag({@required String time, String timeExtra})
       : time0 = time,
-        time1=timeExtra;
-  TimeTag.copy(TimeTag timeTag)
-      : this(time: timeTag.time0, timeExtra: timeTag.time1);
+        time1 = timeExtra;
+  // Copy constructor
+  TimeTag.copy(TimeTag src)
+      : this(time: src.time0, timeExtra: src.time1);
 
   @override
   Widget getWidget({whenDragging = false}) {
+    if(this == nullTag)
+      return Container(width: widgetWidth, height: 0,);
     return Container(
       width: widgetWidth,
-      height: this == nullTag
-          ? 0
-          : widgetHeight,
-      color: this == TimeTag.nullTag
-          ? null
-          : Colors.blue,
+      height: widgetHeight,
+      color: Colors.blue,
       child: Text(
-          this == TimeTag.nullTag
-              ? ''
-              : time0
+        time0,
+        style: TextStyle(
+          fontSize: 10,
+          color: whenDragging
+            ? Colors.grey
+            : Colors.black,
+          decoration: TextDecoration.none,
+          fontWeight: FontWeight.normal
+        ),
       ),
     );
   }
