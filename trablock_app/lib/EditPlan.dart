@@ -1,7 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trablock_app/Data.dart';
-import 'package:trablock_app/SearchMap.dart';
+
+class _UserInterface {
+  static const int opt_childWhenDragging = 1;
+
+  static Widget getWidget(data, {option = 0}) {
+    if(data is Destination) {
+      double _widgetWidth = 200, _widgetHeight = 60;
+      return Container(
+          width: _widgetWidth,
+          height: _widgetHeight,
+          color: option & 1 != 0
+              ? Color.fromRGBO(
+              data.blockColor[0], data.blockColor[1], data.blockColor[2], 0.3)
+              : Color.fromRGBO(
+              data.blockColor[0], data.blockColor[1], data.blockColor[2], 1),
+          child: Center(child: Text(
+            data.name,
+            style: TextStyle(
+                fontSize: 20,
+                color: option & opt_childWhenDragging != 0
+                    ? Colors.grey
+                    : Colors.black,
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.normal
+            ),
+          ))
+      );
+    }
+    else if(data is TimeTag) {
+      double _widgetWidth = 60, _widgetHeight = 30;
+      if(data == TimeTag.nullTag)
+        return Container(width: _widgetWidth, height: 0,);
+      return Container(
+        width: _widgetWidth,
+        height: _widgetHeight,
+        color: option | opt_childWhenDragging
+            ? Colors.cyanAccent : Colors.blue,
+        child: Text(
+          data.time0,
+          style: TextStyle(
+              fontSize: 15,
+              color: option | opt_childWhenDragging
+                  ? Colors.grey
+                  : Colors.black,
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.normal
+          ),
+        ),
+      );
+    }
+    return Container();
+  }
+
+  static Widget _indicatorBox(int index) => Container(
+    width: 30, height: 30,
+    child: Icon(
+      Icons.circle,
+      size: 20,
+      color: _BuildDayPageState._currentPage == index ? Colors.black : Colors.grey,
+    )
+  );
+
+  static Widget removeBar() => Row(
+      children: <Widget>[
+        Expanded(
+            child: Container(
+              height: _BlockTowerState._onDragWidget != null ? 50 : 0,
+              decoration: BoxDecoration(gradient: LinearGradient(
+                  colors: [_BlockTowerState._onWillAcceptIndex == -2 ? Colors.red : Colors.grey, Colors.transparent],
+                  begin: FractionalOffset.bottomCenter,
+                  end: FractionalOffset.topCenter
+              )),
+              child: Icon(Icons.delete, color: Colors.white,),
+            )
+        )
+      ]
+  );
+}
 
 class EditPlanRoute extends StatefulWidget {
   static final String routeName = '/edit';
@@ -11,8 +87,6 @@ class EditPlanRoute extends StatefulWidget {
 }
 
 class _EditPlanRouteState extends State<EditPlanRoute> {
-  //static String _destinationName = '';
-
   TextEditingController controller = TextEditingController();
 
   @override
@@ -27,9 +101,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child:  BuildDayPage(_travel, this),
-          ),
+          Expanded(child:  BuildDayPage(_travel, this)),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -101,18 +173,15 @@ class BuildDayPage extends StatefulWidget {
   final State<EditPlanRoute> _routeState;
   BuildDayPage(this.travel, this._routeState);
 
-
   @override
   _BuildDayPageState createState() => _BuildDayPageState();
 }
 
 class _BuildDayPageState extends State<BuildDayPage> {
   static PageController _controller;
-  static final int pageStartIndex = 0;
+  static const int pageStartIndex = 0;
   static int _currentPage = 0;
-  static final double _boxSize = 40;
-  static final double _intervalSize = 40;
-  static final double _intervalSizeWide = 80;
+
   static int _onWillAcceptIndex = -1;
 
   static BuildDayPage _onDragWidget;
@@ -130,131 +199,89 @@ class _BuildDayPageState extends State<BuildDayPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> res = [];
+    for (int i = 0; i <= widget.travel.days.length; i++) {
+      res.add(DragTarget(
+        builder: (context, List<List<Destination>> candidateData, rejectedData){
+          return Container(
+            width: _onWillAcceptIndex == i ? 40 : 20,
+            height: 30,
+          );
+        },
+        onWillAccept: (data){
+          _onWillAcceptIndex = i;
+          return true;
+        },
+        onLeave: (data) => _onWillAcceptIndex = -1,
+        onAccept: (data) => setState(() {
+          int position = _onDragWidget.travel.days.indexOf(data);
+          _onDragWidget.travel.days.remove(data);
+          i > position
+              ? widget.travel.days.insert(i - 1, data)
+              : widget.travel.days.insert(i, data);
+          _onWillAcceptIndex = -1;
+          if(_currentPage == position)
+            i > position
+              ? _controller.jumpToPage(i-1)
+              : _controller.jumpToPage(i);
+        }),
+      ));  // invert
+      if(i == widget.travel.days.length) {
+        res.add(InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: _UserInterface._indicatorBox(i),
+          onTap: () => _controller.animateToPage(i, duration: const Duration(milliseconds: 100), curve: Curves.fastOutSlowIn),
+        ));  // new page indicator
+        continue;
+      }
+      res.add(Draggable(
+        child: InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: _UserInterface._indicatorBox(i),
+          onTap: () => _controller.animateToPage(i, duration: const Duration(milliseconds: 100), curve: Curves.fastOutSlowIn),
+        ),
+        feedback: _UserInterface._indicatorBox(i),
+        childWhenDragging: Container(),
+        data: widget.travel.days[i],
+        onDragStarted: () => setState(() => _onDragWidget = widget),
+        onDragEnd: (details) => setState(() => _onDragWidget= null),
+      ));  // each page indicator
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        _dayBoxIndicator(),
-        Expanded(
-          child: _setDayPage(),
-        ),
+        SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: res,
+            )
+        ),  // indicator
+        Expanded(child: IndexedStack(
+          index: pageStartIndex,
+          children: <Widget>[
+            PageView.builder(
+              controller: _controller,
+              itemCount: widget.travel.days.length+1,
+              physics: const PageScrollPhysics(),
+              onPageChanged: (int index) => widget._routeState.setState(() => _currentPage = index),
+              itemBuilder: (context, page) =>
+                page < widget.travel.days.length
+                  ? BlockTower(widget.travel.days[page])
+                  : Center(child: RaisedButton(
+                    child: Icon(Icons.add) ,//Text('', style: TextStyle(fontSize: 24))
+                    onPressed: () => setState(() => widget.travel.days.add([])),
+                  )),
+            ),
+          ],
+        )),  // PageView
       ],
-    );
-  }
-
-  Widget _setDayPage(){
-    return IndexedStack(
-      index: pageStartIndex,
-      children: <Widget>[
-        PageView.builder(
-          itemCount: widget.travel.days.length+1,
-          physics: PageScrollPhysics(),
-          onPageChanged: (int index){
-            widget._routeState.setState(() {
-              _currentPage = index;
-            });
-          },
-          itemBuilder: (context, page) {
-            if (page < widget.travel.days.length) {
-              return Center(
-                  child: BlockTower(destinationList: widget.travel.days[page], onEditMode: true,),
-              );
-            }
-            else
-              return Center(child: _newPage());
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _newPage() {
-    return Container(
-      child: Center(
-        child: RaisedButton(
-          child: Icon(Icons.add) ,//Text('', style: TextStyle(fontSize: 24))
-          onPressed: (){
-            setState(() {
-              widget.travel.days.add([]);
-            });
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _dayBoxIndicator(){
-    List<Widget> res = [];
-    for (int i = 0; i < widget.travel.days.length; i++){
-      res.add(_makeInvert(index : i));
-      res.add(
-        Draggable(
-          child: _makeBox(i),
-          feedback: _makeBox(i),
-          childWhenDragging: Container(),
-          data: widget.travel.days[i],
-          onDragStarted: () {
-            setState(() {
-              _onDragWidget = widget;
-            });
-          },
-          onDragEnd: (details) {
-            setState(() {
-              _onDragWidget= null;
-            });
-          },
-        ),
-      );
-    }
-    res.add(_makeInvert(index: widget.travel.days.length));
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: res,
-      )
-    );
-  }
-
-  Widget _makeBox(int index){
-    return Container(
-      width: _boxSize,
-      height: _boxSize,
-      color: _currentPage == index ? Colors.red : Colors.grey,
-      child: Text("${index+1}일차"),
-    );
-  }
-
-  Widget _makeInvert({@required final int index}){
-    return DragTarget(
-      builder: (context, List<List<Destination>> candidateData, rejectedData){
-        return Container(
-          width: _onWillAcceptIndex == index ? _intervalSizeWide : _intervalSize,
-          height: _boxSize,
-          color: Colors.black,
-        );
-      },
-      onWillAccept: (data){
-        _onWillAcceptIndex = index;
-        return true;
-      },
-      onLeave: (data){
-        _onWillAcceptIndex = -1;
-      },
-      onAccept: (data){
-        setState(() {
-          int position = _onDragWidget.travel.days.indexOf(data);
-          _onDragWidget.travel.days.remove(data);
-          index > position
-              ? widget.travel.days.insert(index - 1, data)
-              : widget.travel.days.insert(index, data);
-
-          _onWillAcceptIndex = -1;
-        });
-      },
     );
   }
 }
-
 
 class BlockTower extends StatefulWidget {
   // Destination, TimeTag 정보를 위젯으로 변환
@@ -262,92 +289,18 @@ class BlockTower extends StatefulWidget {
    * List<Destination> _destinationList
      - required
      - 현재 계획중인 목적지 및 그 순서 정보 포함
-   * bool onEditMode
-     - optional(default: false)
-     - 드래그 등을 통한 수정 가능 여부
    */
   final List<Destination> _destinationList;
-  final bool _onEditMode;
 
-  BlockTower({@required List<Destination> destinationList, onEditMode: false})
-      : _destinationList = destinationList, _onEditMode = onEditMode;
+  BlockTower(this._destinationList);
 
   @override
   _BlockTowerState createState() => _BlockTowerState();
 }
 
 class _BlockTowerState extends State<BlockTower> {
-  static const int widget_removeBar = 1;
-  static const int opt_childWhenDragging = 1;
-
   static BlockTower _onDragWidget;
   static int _onWillAcceptIndex = -1;
-
-  static Widget getWidget(data, {option = 0}) {
-    if(data is Destination) {
-      double _widgetWidth = 200, _widgetHeight = 60;
-      return Container(
-          width: _widgetWidth,
-          height: _widgetHeight,
-          color: option & 1 != 0
-              ? Color.fromRGBO(
-              data.blockColor[0], data.blockColor[1], data.blockColor[2], 0.3)
-              : Color.fromRGBO(
-              data.blockColor[0], data.blockColor[1], data.blockColor[2], 1),
-          child: Center(child: Text(
-            data.name,
-            style: TextStyle(
-                fontSize: 20,
-                color: option & 1 != 0
-                    ? Colors.grey
-                    : Colors.black,
-                decoration: TextDecoration.none,
-                fontWeight: FontWeight.normal
-            ),
-          ))
-      );
-    }
-    else if(data is TimeTag) {
-      double _widgetWidth = 60, _widgetHeight = 30;
-      if(data == TimeTag.nullTag)
-        return Container(width: _widgetWidth, height: 0,);
-      return Container(
-        width: _widgetWidth,
-        height: _widgetHeight,
-        color: option | opt_childWhenDragging
-            ? Colors.cyanAccent : Colors.blue,
-        child: Text(
-          data.time0,
-          style: TextStyle(
-              fontSize: 15,
-              color: option | opt_childWhenDragging
-                  ? Colors.grey
-                  : Colors.black,
-              decoration: TextDecoration.none,
-              fontWeight: FontWeight.normal
-          ),
-        ),
-      );
-    }
-    if(data == widget_removeBar) {
-      return Row(
-          children: <Widget>[
-            Expanded(
-                child: Container(
-                  height: _onDragWidget != null ? 50 : 0,
-                  decoration: BoxDecoration(gradient: LinearGradient(
-                      colors: [_onWillAcceptIndex == -2 ? Colors.red : Colors.grey, Colors.transparent],
-                      begin: FractionalOffset.bottomCenter,
-                      end: FractionalOffset.topCenter
-                  )),
-                  child: Icon(Icons.delete, color: Colors.white,),
-                )
-            )
-          ]
-      );
-    }
-    return Container();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -357,8 +310,7 @@ class _BlockTowerState extends State<BlockTower> {
 
     List<Widget> result = [];
 
-    for(int i=0; i<widget._destinationList.length; i++){
-      Destination des = widget._destinationList[i];
+    for(int i=0; i<=widget._destinationList.length; i++){
       result.add(DragTarget(
         builder: (context, List<Destination> candidateData, rejectData){
           return Container(
@@ -368,104 +320,57 @@ class _BlockTowerState extends State<BlockTower> {
                 : _intervalHeight,
           );
         },
-        onWillAccept: (data){
+        onWillAccept: (data) {
           _onWillAcceptIndex = i;
           return true;
         },
-        onLeave: (data){
-          _onWillAcceptIndex = -1;
-        },
+        onLeave: (data) => _onWillAcceptIndex = -1,
         onAccept: (data){
-          if(data is Destination) {
-            setState(() {
-              if (_onDragWidget == null){
-                // 새 블럭을 추가하는 경우
-                widget._destinationList.insert(i, data);
-              } else if (_onDragWidget == widget) {
-                // 도달한 부분 일자와 출발한 부분 일자가 동일한 경우
-                int position = _onDragWidget._destinationList.indexOf(data);
-                _onDragWidget._destinationList.removeAt(position);
-                i > position
-                    ? widget._destinationList.insert(i - 1, data)
-                    : widget._destinationList.insert(i, data);
-              } else {
-                _onDragWidget._destinationList.remove(data);
-                widget._destinationList.insert(i, data);
-              }
-              _onWillAcceptIndex = -1;
-            });
-          } else if(data is TimeTag) {
-            setState(() {
-              if (_onDragWidget == null) {
-                TextEditingController _controller = TextEditingController();
-                // 새 태그를 추가하는 경우
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder:(BuildContext context) {
-                      return AlertDialog(
-                        content: Column(
-                          children: <Widget>[
-                            TextField(controller: _controller,)
-                          ],
-                        ),
-                        actions: <Widget>[
-                          FlatButton(onPressed: () {Navigator.pop(context, _controller.text);}, child: Text("ok")),
-                          FlatButton(onPressed: () {Navigator.pop(context, "");}, child: Text("close")),
-                        ],
-                      );
-                    }
-                ).then((value) {setState(() {
-                  if(value != "")
-                    widget._destinationList[i].timeTag = TimeTag(time: value);
-                });});
-              }
-              else {
-                for(int j=0; j<_onDragWidget._destinationList.length; j++)
-                  if(_onDragWidget._destinationList[j].timeTag == data)
-                    _onDragWidget._destinationList[j].timeTag = TimeTag.nullTag;
-                widget._destinationList[i].timeTag = TimeTag.copy(data);
-              }
-              _onWillAcceptIndex = -1;
-            });
-          }
+          setState(() {
+            if (_onDragWidget == null) {
+              // 새 블럭을 추가하는 경우
+              widget._destinationList.insert(i, data);
+            } else if (_onDragWidget == widget) {
+              // 도달한 부분 일자와 출발한 부분 일자가 동일한 경우
+              int position = _onDragWidget._destinationList.indexOf(data);
+              _onDragWidget._destinationList.removeAt(position);
+              i > position
+                ? widget._destinationList.insert(i - 1, data)
+                : widget._destinationList.insert(i, data);
+            } else {
+              _onDragWidget._destinationList.remove(data);
+              widget._destinationList.insert(i, data);
+            }
+            _onWillAcceptIndex = -1;
+          });
         },
       ));  // interval
+      if(i >= widget._destinationList.length) continue;
+      Destination des = widget._destinationList[i];
       result.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Draggable(
-            child: getWidget(des),
-            feedback: getWidget(des),
-            childWhenDragging: getWidget(des, option: opt_childWhenDragging),
-            data: des,
-            onDragStarted: () {
-              setState(() {
-                _onDragWidget = widget;
-              });
-            },
-            onDragEnd: (details) {
-              setState(() {
-                _onDragWidget= null;
-              });
-            },
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Draggable(
+              child: _UserInterface.getWidget(des),
+              feedback: _UserInterface.getWidget(des),
+              childWhenDragging: _UserInterface.getWidget(des, option: _UserInterface.opt_childWhenDragging),
+              data: des,
+              onDragStarted: () => setState(() => _onDragWidget = widget),
+              onDragEnd: (details) => setState(() => _onDragWidget= null),
+            ),
+            onTap: () => Navigator.pushNamed(context, TempRoute.routeName),
           ),  // Destination
           Draggable(  // TimeTag
-            child: getWidget(des.timeTag),
-            feedback: getWidget(des.timeTag),
-            childWhenDragging: getWidget(des.timeTag, option: opt_childWhenDragging),
+            child: _UserInterface.getWidget(des.timeTag),
+            feedback: _UserInterface.getWidget(des.timeTag),
+            childWhenDragging: _UserInterface.getWidget(des.timeTag, option: _UserInterface.opt_childWhenDragging),
             data: des.timeTag,
-            onDragStarted: () {
-              setState(() {
-                _onDragWidget = widget;
-              });
-            },
-            onDragEnd: (details) {
-              setState(() {
-                _onDragWidget= null;
-              });
-            },
+            onDragStarted: () => setState(() => _onDragWidget = widget),
+            onDragEnd: (details) => setState(() => _onDragWidget= null),
           ),  // TimeTag
         ],
       ));  // each tile
@@ -481,15 +386,13 @@ class _BlockTowerState extends State<BlockTower> {
         )),
         DragTarget(
           builder: (context, List<Destination> candidateData, rejectedData){
-            return getWidget(widget_removeBar);
+            return _UserInterface.removeBar();
           },
           onWillAccept: (data) {
             _onWillAcceptIndex = -2;
             return true;
           },
-          onLeave: (data) {
-            _onWillAcceptIndex = -1;
-          },
+          onLeave: (data) => _onWillAcceptIndex = -1,
           onAccept: (data) {
             if(data is Destination) {
               _onDragWidget._destinationList.remove(data);
@@ -505,5 +408,13 @@ class _BlockTowerState extends State<BlockTower> {
         ),  // Remove_bar
       ],
      );
+  }
+}
+
+class TempRoute extends StatelessWidget {
+  static const routeName = "/tmp";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar());
   }
 }

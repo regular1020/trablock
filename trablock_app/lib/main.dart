@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
         EditPlanRoute.routeName: (context) => EditPlanRoute(),
         ShowMap.routeName: (context) => ShowMap(),
         SearchMap.routeName: (context) => SearchMap(),
+        TempRoute.routeName: (context) => TempRoute(),
       },
     );
   }
 }
 
-// MyHomePage 대신 다른 이름 필요성 느낌
 class MainRoute extends StatefulWidget {
   static final String routeName = '/';
 
@@ -51,7 +51,6 @@ class _MainRouteState extends State<MainRoute> {
             ListTile(
               title: Text('일정 제거'),
               onTap : () {
-                // Upadte the state of the app
                 // 제거할 일정 선택하는 기능
                 Navigator.pop(context);
                 setState(() {
@@ -67,7 +66,6 @@ class _MainRouteState extends State<MainRoute> {
             ListTile(
               title: Text('설정'),
               onTap: () {
-                // Upadte the state of the app
                 // 기타 설정창으로 넘어가는 기능
                 Navigator.pop(context);
               },
@@ -77,8 +75,6 @@ class _MainRouteState extends State<MainRoute> {
         ),
       ),
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text('widget.title'),
       ),
       body: TravelListView(),
@@ -97,7 +93,7 @@ class _MainRouteState extends State<MainRoute> {
                     onChanged: (String str) {
                       setState(() => _travelName = str);
                     },
-                ),//입력칸 추가완료
+                ),
                 actions: <Widget>[
                   FlatButton(
                     child: Text("확인"),
@@ -122,7 +118,7 @@ class _MainRouteState extends State<MainRoute> {
         },
         tooltip: '새 여행 시작',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

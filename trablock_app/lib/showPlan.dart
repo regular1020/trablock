@@ -73,7 +73,7 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
                         ],
                       ),
 
-                      BlockTower(destinationList: _travel.days[page]),
+                      BlockTower(_travel.days[page]),
                     ]
                   ),
                 ),
