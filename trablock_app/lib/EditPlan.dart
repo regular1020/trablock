@@ -106,6 +106,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
+                padding: EdgeInsets.only(top: 20, bottom: 20,),
                 icon: Icon(Icons.add),
                 onPressed: (){
                   showDialog(
@@ -125,6 +126,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
                             },
                           ),//입력칸 추가완료
                           actions: <Widget>[
+                            // ignore: deprecated_member_use
                             FlatButton(
                               child: Text("확인"),
                               onPressed: (){
@@ -132,6 +134,7 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
                                 setState(() => _travel.candidateDestination.add(Destination(name: _destinationName)));
                               },
                             ),
+                            // ignore: deprecated_member_use
                             FlatButton(
                               child: Text(
                                 "취소",
@@ -145,22 +148,47 @@ class _EditPlanRouteState extends State<EditPlanRoute> {
                   );
                 },
               ),
-              Draggable(
-                child: Card(child: Text('block'),),
-                feedback: Card(child: Text('block'),),
-                childWhenDragging: Container(),
-                data: Destination(name: 'test'),
+              BuildSideBoxList(_travel),
+              Padding(
+                padding: EdgeInsets.only(top: 20, bottom: 20,),
+                child: Draggable(
+                  child: Card(child: Text('time'),),
+                  feedback: Card(child: Text('time'),),
+                  data: TimeTag.nullTag,
+                ),
               ),
-              Draggable(
-                child: Card(child: Text('time'),),
-                feedback: Card(child: Text('time'),),
-                data: TimeTag.nullTag,
-              ),
+              Expanded(child: Container(),),
             ],
           ),
         ],
       ),
+    );
+  }
+}
 
+class BuildSideBoxList extends StatelessWidget {
+  Travel travel;
+  BuildSideBoxList(this.travel);
+  List<Widget> _sideBoxes = [];
+
+  @override
+  Widget build(BuildContext context) {
+    for (int i = 0; i < travel.candidateDestination.length; i++){
+      _sideBoxes.add(
+        Padding(
+          padding: EdgeInsets.only(top: 20, bottom: 20,),
+          child: Draggable(
+            child: Card(child: Text(travel.candidateDestination[i].name),),
+            feedback: Card(child: Text(travel.candidateDestination[i].name),),
+            childWhenDragging: Container(),
+            data: Destination(name: travel.candidateDestination[i].name),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: _sideBoxes,
     );
   }
 }
@@ -271,6 +299,7 @@ class _BuildDayPageState extends State<BuildDayPage> {
               itemBuilder: (context, page) =>
                 page < widget.travel.days.length
                   ? BlockTower(widget.travel.days[page])
+                  // ignore: deprecated_member_use
                   : Center(child: RaisedButton(
                     child: Icon(Icons.add) ,//Text('', style: TextStyle(fontSize: 24))
                     onPressed: () => setState(() => widget.travel.days.add([])),

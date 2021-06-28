@@ -18,7 +18,7 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
   int pageInitIndex = 0;
   @override
   void initState() {
-    controller = PageController(initialPage: 0, viewportFraction: 0.8);
+    controller = PageController(initialPage: 0);
     super.initState();
   }
 
@@ -50,7 +50,6 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
             itemBuilder: (context, page) {
               return Center(
                 child: Container(
-                  color: Colors.amber,
                   child: Column(
                     children: <Widget>[
                       Row(
@@ -62,18 +61,18 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
                             onPressed: (){
                               setState(() {
                                 Navigator.pushNamed(
-                                    context,
-                                    ShowMap.routeName,
-                                    arguments: _travel.days[page],
+                                  context,
+                                  ShowMap.routeName,
+                                  arguments: _travel.days[page],
                                 );
                               });
                             },
-
                           )
                         ],
                       ),
-
-                      BlockTower(_travel.days[page]),
+                      Expanded(
+                        child: BuildShowBlockTower(_travel, page),
+                      )
                     ]
                   ),
                 ),
@@ -84,6 +83,63 @@ class _ShowPlanRouteState extends State<ShowPlanRoute> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BuildShowBlockTower extends StatelessWidget {
+  Travel _travel;
+  int day;
+  BuildShowBlockTower(this._travel, this.day);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> _tower = [];
+
+    for (int i = 0; i < _travel.days[day].length-1; i++){
+      _tower.add(
+        Container(
+          height: MediaQuery.of(context).size.height*0.08,
+          width: MediaQuery.of(context).size.width*0.6,
+          child: Center(
+            child: Text(
+              _travel.days[day][i].name,
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.lightGreenAccent
+          ),
+        )
+      );
+      _tower.add(
+        Padding(
+          padding: EdgeInsets.all(20),
+          child: Icon(Icons.arrow_downward, size: 40,),
+        )
+      );
+    }
+    _tower.add(
+        Container(
+          height: MediaQuery.of(context).size.height*0.08,
+          width: MediaQuery.of(context).size.width*0.6,
+          child: Center(
+            child: Text(
+              _travel.days[day][_travel.days[day].length-1].name,
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.lightGreenAccent
+          ),
+        )
+    );
+
+    return ListView(
+      padding: EdgeInsets.only(left: 50, right: 50),
+      children: _tower,
     );
   }
 }

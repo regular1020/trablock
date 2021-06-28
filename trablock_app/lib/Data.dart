@@ -16,6 +16,13 @@ Travel _testTravel(){
       Destination(name: '63 building', address: LatLng(37.310976,126.562476))
     ]
   ];
+  res.candidateDestination = [
+    Destination(name: 'Bukchon', address: LatLng(37.587145745483, 126.98255411452)),
+    Destination(name: 'Gyeongbokgung', address: LatLng(37.576267, 126.976912)),
+    Destination(name: 'Seoul Station', address: LatLng(37.555078,126.970702)),
+    Destination(name: 'Gangnam', address: LatLng(37.498095,127.027610)),
+    Destination(name: '63 building', address: LatLng(37.310976,126.562476))
+  ];
   return res;
 }
 
