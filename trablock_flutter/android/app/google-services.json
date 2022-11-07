@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "820176636025",
+    "project_id": "trablock-3c5a2",
+    "storage_bucket": "trablock-3c5a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820176636025:android:f62fa1d8e66b12527feca8",
+        "android_client_info": {
+          "package_name": "com.trablock.trablock_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820176636025-avfparkfvmcncvb6t3qd3k59ka7sgcqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trablock.trablock_flutter",
+            "certificate_hash": "845f044b79c4742c92cbead07c732c5a9726b445"
+          }
+        },
+        {
+          "client_id": "820176636025-7lskos1v9njard4k74mccl5su5esqv1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0NunD_oXcvIvd_pRoca_E-4Y7GsjP0xs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820176636025-7lskos1v9njard4k74mccl5su5esqv1t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "820176636025-3d4fg7fuq7hgedm3qs1nt3104rakb6un.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.trablock.trablockFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

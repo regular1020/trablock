@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>820176636025-3d4fg7fuq7hgedm3qs1nt3104rakb6un.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.820176636025-3d4fg7fuq7hgedm3qs1nt3104rakb6un</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>820176636025-avfparkfvmcncvb6t3qd3k59ka7sgcqc.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDd64yNv05lNkmN42aRLBkqr2yZjdmjwKk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>820176636025</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.trablock.trablockFlutter</string>
+	<key>PROJECT_ID</key>
+	<string>trablock-3c5a2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>trablock-3c5a2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:820176636025:ios:78d509332c4d42567feca8</string>
+</dict>
+</plist>
