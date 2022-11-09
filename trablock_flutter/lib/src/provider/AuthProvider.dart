@@ -5,12 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthProvider with ChangeNotifier {
   AuthProvider({auth, user}) : _auth = auth ?? FirebaseAuth.instance;
 
-  User? _user;
   FirebaseAuth _auth;
 
-  User? get user => _user;
-
-  Future<void> signInWithGoogle() async {
+  Future<String?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
 
@@ -21,6 +18,6 @@ class AuthProvider with ChangeNotifier {
       idToken: googleAuth?.idToken
     );
     final authResult = await _auth.signInWithCredential(credential);
-    _user = authResult.user;
+    return authResult.user?.uid;
   }
 }

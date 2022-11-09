@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
-import 'package:trablock_flutter/src/view/LoginWithGoogleView.dart';
+import 'package:trablock_flutter/src/provider/UserProvider.dart';
+import 'package:trablock_flutter/src/view/LoginView.dart';
+import 'package:trablock_flutter/src/view/NickNameSettingView.dart';
 
 
-class RoutingView extends StatelessWidget {
+class RoutingView extends StatefulWidget {
   const RoutingView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<RoutingView> createState() => _RoutingViewState();
+}
 
-    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
-    if (auth.user == null) {
-      return LoginWithGoogleView();
-    } else {
-      return Container();
+class _RoutingViewState extends State<RoutingView> {
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<UserProvider>(context, listen: false).asyncMethod();
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (Provider.of<UserProvider>(context).id == null) {
+      return LoginView();
     }
+    if (Provider.of<UserProvider>(context).nickname == null) {
+      return const NickNameSettingView();
+    }
+    return Container(
+      child: Text("완료"),
+    );
   }
 }
