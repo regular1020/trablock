@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:trablock_flutter/src/provider/AuthProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
 import 'package:trablock_flutter/src/view/LoginView.dart';
 import 'package:trablock_flutter/src/view/NickNameSettingView.dart';
@@ -19,7 +17,7 @@ class _RoutingViewState extends State<RoutingView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<UserProvider>(context, listen: false).asyncMethod();
+      Provider.of<UserProvider>(context, listen: false).readUserIDFromLocal();
     });
     super.initState();
   }
@@ -33,7 +31,7 @@ class _RoutingViewState extends State<RoutingView> {
       return const NickNameSettingView();
     }
     return Container(
-      child: Text("완료"),
+      child: Text(Provider.of<UserProvider>(context).nickname!),
     );
   }
 }
