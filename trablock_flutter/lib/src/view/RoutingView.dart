@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
 import 'package:trablock_flutter/src/view/LoginView.dart';
+import 'package:trablock_flutter/src/view/MainView.dart';
 import 'package:trablock_flutter/src/view/NickNameSettingView.dart';
 
 
@@ -30,8 +31,6 @@ class _RoutingViewState extends State<RoutingView> {
     if (Provider.of<UserProvider>(context).nickname == null) {
       return const NickNameSettingView();
     }
-    return Container(
-      child: Text(Provider.of<UserProvider>(context).nickname!),
-    );
+    return const MainView();
   }
 }

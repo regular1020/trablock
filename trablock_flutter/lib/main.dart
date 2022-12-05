@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
+import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
-import 'package:trablock_flutter/src/view/LoginView.dart';
 import 'package:trablock_flutter/src/view/RoutingView.dart';
 import 'firebase_options.dart';
 
@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-          ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
+          ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+          ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider())
         ],
         child: RoutingView(),
       )

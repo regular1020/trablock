@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,7 +28,7 @@ class UserProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
