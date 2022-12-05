@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
+import 'package:trablock_flutter/src/view/AddTravelView.dart';
+import 'package:trablock_flutter/src/view/SetNewTravelView.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -32,15 +34,15 @@ class _MainViewState extends State<MainView> {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
               child: Text(
                 "메뉴",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30
+                    color: Colors.white,
+                    fontSize: 30
                 ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
               ),
             ),
             ListTile(
@@ -61,7 +63,7 @@ class _MainViewState extends State<MainView> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          // Todo : Navigate to add travel view
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const SetNewTravelView()));
         }
       ),
       body: Column(

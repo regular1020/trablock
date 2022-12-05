@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
+import 'package:trablock_flutter/src/view/LoginView.dart';
 import 'package:trablock_flutter/src/view/RoutingView.dart';
 import 'firebase_options.dart';
 
