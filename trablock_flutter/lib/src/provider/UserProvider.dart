@@ -19,12 +19,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkID () async {
+  Future<void> checkIDFromFirebase() async {
     try {
-      var doc = await db.collection("user").doc(id).get();
+      var doc = await db.collection("user").doc(_id).get();
       if (doc.exists) {
-        var docRef = await db.collection("user").doc(id).get();
-        _nickname = docRef.get("nick");
+        _nickname = doc.get("nick");
         notifyListeners();
       }
     } catch (e) {
@@ -32,9 +31,26 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  readUserIDFromLocal() async {
+  Future<bool> readUserIDFromLocal() async {
     _id = await storage.read(key: "userID");
-    notifyListeners();
+    if (_id == null) {
+      notifyListeners();
+      return true;
+    } else{
+      return false;
+    }
+  }
+
+  Future<int> getRoutingFlagFromUserInformation() async {
+    await readUserIDFromLocal();
+    await checkIDFromFirebase();
+    if (_id == null) {
+      return 1;
+    }
+    if (_nickname == null) {
+      return 2;
+    }
+    return 3;
   }
 
   void addUserNickNameToFireStore(String id, String nick) {

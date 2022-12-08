@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
-import 'package:trablock_flutter/src/view/LoginView.dart';
 import 'package:trablock_flutter/src/view/RoutingView.dart';
 import 'firebase_options.dart';
 
@@ -21,18 +20,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Trablock',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: MultiProvider(
+    return MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
           ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-          ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider())
+          ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider()),
         ],
-        child: RoutingView(),
+        child: MaterialApp(
+          title: 'Trablock',
+          theme: ThemeData(
+            primarySwatch: Colors.blueGrey,
+          ),
+          home: const RoutingView(),
       )
     );
   }

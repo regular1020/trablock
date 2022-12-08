@@ -17,20 +17,28 @@ class _RoutingViewState extends State<RoutingView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<UserProvider>(context, listen: false).readUserIDFromLocal();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      UserProvider provider = Provider.of<UserProvider>(context, listen: false);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Provider.of<UserProvider>(context).id == null) {
-      return LoginView();
-    }
-    if (Provider.of<UserProvider>(context).nickname == null) {
-      return const NickNameSettingView();
-    }
-    return const MainView();
+    return FutureBuilder(
+      future: Provider.of<UserProvider>(context, listen: false).getRoutingFlagFromUserInformation(),
+      builder: ((context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == 1) {
+            return LoginView();
+          }
+          if (snapshot.data == 2) {
+            return const NickNameSettingView();
+          }
+          return const MainView();
+        }
+        return const CircularProgressIndicator();
+      }),
+    );
   }
 }
