@@ -18,7 +18,9 @@ class _MainViewState extends State<MainView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       TravelProvider travelProvider = Provider.of<TravelProvider>(context, listen: false);
-      travelProvider.readTravelFromFireStore(Provider.of<UserProvider>(context, listen: false).id!);
+      if (travelProvider.travels.isEmpty) {
+        travelProvider.readTravelFromFireStore(Provider.of<UserProvider>(context, listen: false).id!);
+      }
     });
     super.initState();
   }
@@ -137,6 +139,7 @@ class _MainViewState extends State<MainView> {
                       ),
                     ),
                     onTap: () {
+                      Provider.of<TravelProvider>(context, listen: false).selectTravel(travels[index].id);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => TravelInfoView()));
                       // ToDo : Navigate to travel plan view
                     },

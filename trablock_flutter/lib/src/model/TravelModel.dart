@@ -13,7 +13,11 @@ class Travel {
 
   Travel({required this.id, required this.owner, required this.destination, required this.period, required this.days, required this.numberOfPeople, required this.places});
 
-  factory Travel.fromSnapshot(DocumentSnapshot travelSnapshot) {
+  factory Travel.fromSnapshot(DocumentSnapshot travelSnapshot, List<DocumentSnapshot> placeSnapshots) {
+    List<Place> tmpPlaceList = [];
+    for (var element in placeSnapshots) {
+      tmpPlaceList.add(Place.fromDocument(element));
+    }
     return Travel(
       id: travelSnapshot.id,
       owner: travelSnapshot.get("owner"),
@@ -21,7 +25,7 @@ class Travel {
       period: travelSnapshot.get("period"),
       days: travelSnapshot.get("days"),
       numberOfPeople: travelSnapshot.get("numberOfPeople"),
-      places: []
+      places: tmpPlaceList
     );
   }
 }
