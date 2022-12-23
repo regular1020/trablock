@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
+import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
 import 'package:trablock_flutter/src/view/AddTravelView.dart';
@@ -139,7 +140,7 @@ class _MainViewState extends State<MainView> {
                       ),
                     ),
                     onTap: () {
-                      Provider.of<TravelProvider>(context, listen: false).selectTravel(travels[index].id);
+                      Provider.of<SelectedTravelProvider>(context, listen: false).selectTravel(travels[index]);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => TravelInfoView()));
                       // ToDo : Navigate to travel plan view
                     },
