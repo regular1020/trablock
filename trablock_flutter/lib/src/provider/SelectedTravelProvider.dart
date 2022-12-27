@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 
@@ -30,8 +31,25 @@ class SelectedTravelProvider with ChangeNotifier {
     try {
       docRef.update(updates);
     } catch (e) {
-      _db.collection("place").add(updates).then((value) => _db.collection("travel").doc(_travel.id).update({"places": FieldValue.arrayUnion([value.id])}));
+      _db.collection("place").add(updates).then((value) => _db.collection("travel").doc(_travel.id).update({"places": FieldValue.arrayUnion([value])}));
     }
+  }
+
+  void addNewPlace(String name, int hour, int minute) {
+    final updates = <String, dynamic>{
+      "date_of_visit": -1,
+      "index": -1,
+      "hour": hour,
+      "minute": minute,
+      "name": name
+    };
+    _db.collection("place").add(updates).then((value) {
+      _db.collection("travel").doc(_travel.id).update({"places": FieldValue.arrayUnion([value])});
+      Place place = Place(id: value.id ,name: name, hour: hour, minute: minute, dateOfVisit: -1, index: -1);
+      travel.places.add(place);
+      unassignedPlaces.add(place);
+      notifyListeners();
+    });
   }
 
   void initTravel() {
@@ -79,7 +97,7 @@ class SelectedTravelProvider with ChangeNotifier {
 
   void insertPlace(Place place, int dayIndex) {
     place.dateOfVisit = dayIndex+1;
-    place.index = 0;
+    place.index = _assignedPlaces[dayIndex].length;
     _assignedPlaces[dayIndex].add(place);
     _unassignedPlaces.remove(place);
     notifyListeners();

@@ -57,10 +57,24 @@ class PlaceList extends StatelessWidget {
                             ),
                           )
                         else
-                          for (int placeIndex = 0; placeIndex < assignedPlaces[day-1].length; placeIndex++)
+                          for (int placeIndex = 0; placeIndex <= assignedPlaces[day-1].length; placeIndex++)
+                            if (placeIndex == assignedPlaces[day-1].length)
+                              SizedBox(
+                                key: Key('$placeIndex'),
+                                height: MediaQuery.of(context).size.height-(150*assignedPlaces[day-1].length),
+                                child: DragTarget<Place>(
+                                  builder: (context, candidateData, rejectedData) {
+                                    return Container();
+                                  },
+                                  onAccept: (place) {
+                                    provider.insertPlace(place, day-1);
+                                  },
+                                ),
+                              )
+                            else
                             SizedBox(
                               key: Key('$placeIndex'),
-                              height: assignedPlaces[day-1][placeIndex].hour * 120.0 + assignedPlaces[day-1][placeIndex].minute * 2.0 + 4,
+                              height: 150,
                               child: Stack(
                                 children: [
                                   PlaceBlock(day: day, placeIndex: placeIndex,),
@@ -68,7 +82,7 @@ class PlaceList extends StatelessWidget {
                                     builder:
                                         (context, candidatePlace, rejectedPlace) {
                                       return Container(
-                                        height: (assignedPlaces[day-1][placeIndex].hour * 120.0 + assignedPlaces[day-1][placeIndex].minute * 2.0) /2,
+                                        height: 75,
                                       );
                                     },
                                     onAccept: (place) {
@@ -77,14 +91,14 @@ class PlaceList extends StatelessWidget {
                                   ),
                                   Column(
                                     children: [
-                                      SizedBox(
-                                        height: (assignedPlaces[day-1][placeIndex].hour * 120.0 + assignedPlaces[day-1][placeIndex].minute * 2.0) / 2,
+                                      const SizedBox(
+                                        height: 75,
                                       ),
                                       DragTarget<Place>(
                                         builder:
                                             (context, candidatePlace, rejectedPlace) {
                                           return Container(
-                                            height: (assignedPlaces[day-1][placeIndex].hour * 120.0 + assignedPlaces[day-1][placeIndex].minute * 2.0) / 2,
+                                            height: 75,
                                           );
                                         },
                                         onAccept: (place) {

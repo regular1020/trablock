@@ -46,9 +46,9 @@ class _TravelInfoViewState extends State<TravelInfoView> {
         child: const Icon(Icons.save),
       ),
       body: Row(
-        children: [
-          const PlaceList(),
-          const LeftPlaceList(),
+        children: const [
+          PlaceList(),
+          LeftPlaceList(),
         ],
       ),
     );

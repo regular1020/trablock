@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
+import 'package:trablock_flutter/src/view/AddPlanView.dart';
 
 import '../provider/SelectedTravelProvider.dart';
 
@@ -33,7 +34,10 @@ class LeftPlaceList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index == unassignedPlaces.length) {
                         return TextButton(
-                            onPressed: () {}, child: const Text("추가"));
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: ((context) => AddPlanView())));
+                            }, 
+                            child: const Text("추가"));
                       } else {
                         return Padding(
                           padding: const EdgeInsets.all(5),
