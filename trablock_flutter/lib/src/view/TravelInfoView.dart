@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
+import 'package:trablock_flutter/src/provider/PlanDragStateProvider.dart';
 import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/widget/LeftPlaceListWidget.dart';
@@ -45,10 +46,33 @@ class _TravelInfoViewState extends State<TravelInfoView> {
         },
         child: const Icon(Icons.save),
       ),
-      body: Row(
-        children: const [
-          PlaceList(),
-          LeftPlaceList(),
+      body: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: const [
+                PlaceList(),
+                LeftPlaceList(),
+              ],
+            ),
+          ),
+          if (Provider.of<PlanDragStateProvider>(context).moved) 
+          Container(
+            height: MediaQuery.of(context).size.height*0.1,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.red
+            ),
+            child: DragTarget<Place>(
+              builder: (context, candidateData, rejectedData) {
+                return Icon(Icons.delete);
+              },
+              onAccept: (place) {
+                Provider.of<SelectedTravelProvider>(context, listen: false).deletePlace(place);
+              },
+            ),
+            
+          )
         ],
       ),
     );

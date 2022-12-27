@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
+import 'package:trablock_flutter/src/provider/PlanDragStateProvider.dart';
 import 'package:trablock_flutter/src/view/AddPlanView.dart';
 
 import '../provider/SelectedTravelProvider.dart';
@@ -69,6 +70,12 @@ class LeftPlaceList extends StatelessWidget {
                                     color: Colors.white, fontSize: 20),
                               )),
                             ),
+                            onDragStarted: () {
+                              Provider.of<PlanDragStateProvider>(context, listen: false).moveStart();
+                            },
+                            onDragEnd: (details) {
+                              Provider.of<PlanDragStateProvider>(context, listen: false).moveEnd();
+                            },
                           ),
                         );
                       }

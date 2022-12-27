@@ -46,9 +46,11 @@ class AddPlanView extends StatelessWidget {
               } else {
                 if (_planHourController.text == "") {
                   _planHourController.text = "0";
+                  return;
                 }
                 if (_planMinuteController.text == "") {
                   _planMinuteController.text = "0";
+                  return;
                 }
                 provider.addNewPlace(_planNameController.text, int.parse(_planHourController.text), int.parse(_planMinuteController.text));
                 Navigator.pop(context);

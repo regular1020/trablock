@@ -52,6 +52,15 @@ class SelectedTravelProvider with ChangeNotifier {
     });
   }
 
+  void deletePlace(Place place) {
+    travel.places.remove(place);
+    unassignedPlaces.remove(place);
+    var placeDoc = _db.collection("place").doc(place.id);
+    _db.collection("travel").doc(_travel.id).update({"places" : FieldValue.arrayRemove([placeDoc])});
+    placeDoc.delete();
+    notifyListeners();
+  }
+
   void initTravel() {
     _assignedPlaces = [];
     _unassignedPlaces = [];
