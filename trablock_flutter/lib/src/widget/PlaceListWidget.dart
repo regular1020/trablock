@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/widget/PlaceBlockWidget.dart';
 
-class PlaceList extends StatelessWidget {
+class PlaceList extends StatefulWidget {
   const PlaceList({super.key});
 
+  @override
+  State<PlaceList> createState() => _PlaceListState();
+}
+
+class _PlaceListState extends State<PlaceList> {
   @override
   Widget build(BuildContext context) {
     PageController pageController = PageController();
@@ -24,60 +30,74 @@ class PlaceList extends StatelessWidget {
           children: List<int>.generate(_travel.days, (index) => index+1).map((day) {
             return Builder(builder: (BuildContext context) {
               assignedPlaces[day-1].sort((a, b) => a.index.compareTo(b.index));
-              return Column(
-                children: [
-                  Padding(
+              return SingleChildScrollView(
+                child: ReorderableColumn(
+                  onReorder: (int oldIndex, int newIndex) {
+                    provider.reorderPlace(oldIndex, newIndex, day-1);
+                  },
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  header: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "$day일차",
-                      style: const TextStyle(
-                        fontSize: 20,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height*0.05,
+                      child: Text(
+                        "$day일차",
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ReorderableListView(
-                      onReorder: (int oldIndex, int newIndex) {
-                        provider.reorderPlace(oldIndex, newIndex, day-1);
+                  footer: SizedBox(
+                    height: MediaQuery.of(context).size.height*0.95-(158*assignedPlaces[day-1].length) > 0? MediaQuery.of(context).size.height*0.95-(158*assignedPlaces[day-1].length) : 0,
+                    child: DragTarget<Place>(
+                      builder: (context, candidateData, rejectedData) {
+                        return Container();
                       },
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      children: <Widget>[
-                        if (assignedPlaces[day-1].isEmpty)
-                          Container(
-                            key: const Key('0'),
-                            child: DragTarget<Place>(
-                              builder: (context, candidatePlace, rejectedPlaces) {
-                                return Container(
-                                  height: MediaQuery.of(context).size.height * 0.8,
-                                );
-                              },
-                              onAccept: (place) {
-                                provider.insertPlace(place, day-1);
-                              },
-                            ),
-                          )
-                        else
-                          for (int placeIndex = 0; placeIndex <= assignedPlaces[day-1].length; placeIndex++)
-                            if (placeIndex == assignedPlaces[day-1].length)
-                              SizedBox(
-                                key: Key('$placeIndex'),
-                                height: MediaQuery.of(context).size.height-(150*assignedPlaces[day-1].length),
-                                child: DragTarget<Place>(
-                                  builder: (context, candidateData, rejectedData) {
-                                    return Container();
-                                  },
-                                  onAccept: (place) {
-                                    provider.insertPlace(place, day-1);
-                                  },
-                                ),
-                              )
-                            else
-                            SizedBox(
-                              key: Key('$placeIndex'),
-                              height: 150,
-                              child: Stack(
+                      onAccept: (place) {
+                        provider.insertPlace(place, day-1);
+                      },
+                    ),
+                  ),
+                  children: <Widget>[
+                    if (assignedPlaces[day-1].isEmpty)
+                      Container(
+                        key: const Key('0'),
+                        child: DragTarget<Place>(
+                          builder: (context, candidatePlace, rejectedPlaces) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                            );
+                          },
+                          onAccept: (place) {
+                            provider.insertPlace(place, day-1);
+                          },
+                        ),
+                      )
+                    else
+                      for (int placeIndex = 0; placeIndex < assignedPlaces[day-1].length; placeIndex++)
+                        SizedBox(
+                          key: Key('$placeIndex'),
+                          height: 150,
+                          child: Stack(
+                            children: [
+                              PlaceBlock(day: day, placeIndex: placeIndex,),
+                              DragTarget<Place>(
+                                builder:
+                                    (context, candidatePlace, rejectedPlace) {
+                                  return Container(
+                                    height: 75,
+                                  );
+                                },
+                                onAccept: (place) {
+                                  provider.insertPlaceAtUpperHalf(place, day-1, placeIndex);
+                                },
+                              ),
+                              Column(
                                 children: [
-                                  PlaceBlock(day: day, placeIndex: placeIndex,),
+                                  const SizedBox(
+                                    height: 75,
+                                  ),
                                   DragTarget<Place>(
                                     builder:
                                         (context, candidatePlace, rejectedPlace) {
@@ -86,34 +106,16 @@ class PlaceList extends StatelessWidget {
                                       );
                                     },
                                     onAccept: (place) {
-                                      provider.insertPlaceAtUpperHalf(place, day-1, placeIndex);
+                                      provider.insertPlaceAtLowerHalf(place, day-1, placeIndex);
                                     },
-                                  ),
-                                  Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 75,
-                                      ),
-                                      DragTarget<Place>(
-                                        builder:
-                                            (context, candidatePlace, rejectedPlace) {
-                                          return Container(
-                                            height: 75,
-                                          );
-                                        },
-                                        onAccept: (place) {
-                                          provider.insertPlaceAtLowerHalf(place, day-1, placeIndex);
-                                        },
-                                      ),
-                                    ],
                                   ),
                                 ],
                               ),
-                            )
-                      ],
-                    ),
-                  ),
-                ],
+                            ],
+                          ),
+                        )
+                  ],
+                ),
               );
             });
           }).toList()

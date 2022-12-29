@@ -33,10 +33,6 @@ class _TravelInfoViewState extends State<TravelInfoView> {
     unassignedPlaces = Provider.of<SelectedTravelProvider>(context).unassignedPlaces;
     assignedPlaces = Provider.of<SelectedTravelProvider>(context).assignedPlaces;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("${_travel.destination}여행"),
-        automaticallyImplyLeading: false,
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _travel.places.forEach((element) {
