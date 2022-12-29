@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
+import 'package:trablock_flutter/src/provider/AddPlanViewProvider.dart';
 import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
+import 'package:trablock_flutter/src/const/addPlanConsts';
 
 class AddPlanView extends StatelessWidget {
   AddPlanView({super.key});
@@ -11,12 +11,11 @@ class AddPlanView extends StatelessWidget {
   final TextEditingController _planNameController = TextEditingController();
   final TextEditingController _planHourController = TextEditingController();
   final TextEditingController _planMinuteController = TextEditingController();
-  late SelectedTravelProvider provider;
 
   @override
   Widget build(BuildContext context) {
     Travel travel = Provider.of<SelectedTravelProvider>(context).travel;
-    provider = Provider.of<SelectedTravelProvider>(context, listen: false);
+    SelectedTravelProvider provider = Provider.of<SelectedTravelProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("${travel.destination}여행 새 일정 추가"),
@@ -43,6 +42,8 @@ class AddPlanView extends StatelessWidget {
                     ],
                   ))
                 );
+              } else if (Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue == null) {
+
               } else {
                 if (_planHourController.text == "") {
                   _planHourController.text = "0";
@@ -52,7 +53,7 @@ class AddPlanView extends StatelessWidget {
                   _planMinuteController.text = "0";
                   return;
                 }
-                provider.addNewPlace(_planNameController.text, int.parse(_planHourController.text), int.parse(_planMinuteController.text));
+                provider.addNewPlace(_planNameController.text, int.parse(_planHourController.text), int.parse(_planMinuteController.text), Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue!);
                 Navigator.pop(context);
               }
             }, 
@@ -94,6 +95,26 @@ class AddPlanView extends StatelessWidget {
                   ),
                 ),
                 const Text("분"),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: Row(
+              children: [
+                const Text("종류 : "),
+                DropdownButton<String>(
+                  value: Provider.of<AddPlanViewProvider>(context).dropDownValue,
+                  onChanged: (String? value) {
+                    Provider.of<AddPlanViewProvider>(context, listen: false).setDropDownValue(value);
+                  },
+                  items: categoryList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList()
+                )
               ],
             ),
           )

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trablock_flutter/src/provider/AddPlanViewProvider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
 import 'package:trablock_flutter/src/provider/PlanDragStateProvider.dart';
 import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider()),
           ChangeNotifierProvider<SelectedTravelProvider>(create: (_) => SelectedTravelProvider()),
           ChangeNotifierProvider<PlanDragStateProvider>(create: (_) => PlanDragStateProvider()),
+          ChangeNotifierProvider<AddPlanViewProvider>(create: (_) => AddPlanViewProvider()),
         ],
         child: MaterialApp(
           title: 'Trablock',
