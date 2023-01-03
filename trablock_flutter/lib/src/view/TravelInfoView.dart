@@ -44,10 +44,32 @@ class _TravelInfoViewState extends State<TravelInfoView> {
       ),
       body: Column(
         children: [
+          Container(
+            color: Colors.blueGrey.withOpacity(0.3),
+            height: MediaQuery.of(context).size.height*0.05,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("${Provider.of<SelectedTravelProvider>(context).travel.destination} 여행"),
+            ),
+          ),
+          Container(
+            color: Colors.blueGrey.withOpacity(0.3),
+            height: MediaQuery.of(context).size.height*0.05,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(Provider.of<SelectedTravelProvider>(context).travel.period),
+            ),
+          ),
           Expanded(
             child: Row(
-              children: const [
+              children: [
                 PlaceList(),
+                Container(
+                  width: 3,
+                  color: Colors.black,
+                ),
                 LeftPlaceList(),
               ],
             ),

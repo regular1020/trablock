@@ -11,11 +11,28 @@ import '../provider/SelectedTravelProvider.dart';
 class LeftPlaceList extends StatelessWidget {
   const LeftPlaceList({super.key});
 
+  Color? getColor(Place place) {
+    switch (place.category) {
+      case "관광지":
+        return Colors.red.withOpacity(0.5);
+      case "식당":
+        return Colors.blue.withOpacity(0.5);
+      case "이동":
+        return Colors.yellow.withOpacity(0.5);
+      case "숙소":
+        return Colors.green.withOpacity(0.5);
+      case "쇼핑":
+        return Colors.purple.withOpacity(0.5);
+      default:
+        return Colors.blueGrey.withOpacity(0.5);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Place> unassignedPlaces = Provider.of<SelectedTravelProvider>(context).unassignedPlaces;
     return SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
+            width: MediaQuery.of(context).size.width * 0.3-3,
             child: Column(
               children: [
                 const SizedBox(
@@ -40,43 +57,45 @@ class LeftPlaceList extends StatelessWidget {
                             }, 
                             child: const Text("추가"));
                       } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: LongPressDraggable<Place>(
-                            data: unassignedPlaces[index],
-                            feedback: Container(
-                              height: MediaQuery.of(context).size.width * 0.25,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              decoration: BoxDecoration(
-                                  color: Colors.blueGrey.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Center(
-                                  child: Text(
-                                unassignedPlaces[index].name,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              )),
+                        return LongPressDraggable<Place>(
+                          data: unassignedPlaces[index],
+                          feedback: Container(
+                            height: MediaQuery.of(context).size.width * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                              color: getColor(unassignedPlaces[index]),
                             ),
-                            child: Container(
-                              height: MediaQuery.of(context).size.width * 0.25,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              decoration: BoxDecoration(
-                                  color: Colors.blueGrey.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Center(
-                                  child: Text(
-                                unassignedPlaces[index].name,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              )),
-                            ),
-                            onDragStarted: () {
-                              Provider.of<PlanDragStateProvider>(context, listen: false).moveStart();
-                            },
-                            onDragEnd: (details) {
-                              Provider.of<PlanDragStateProvider>(context, listen: false).moveEnd();
-                            },
+                            child: Center(
+                                child: Text(
+                              unassignedPlaces[index].name,
+                              style: const TextStyle(
+                                color : Colors.black54,
+                                fontSize: 15
+                              ),
+                            )),
                           ),
+                          child: Container(
+                            height: MediaQuery.of(context).size.width * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                              color: getColor(unassignedPlaces[index]),
+                            ),
+                            child: Center(
+                              child: Text(
+                                unassignedPlaces[index].name,
+                                style: const TextStyle(
+                                  color : Colors.black54,
+                                  fontSize: 15
+                                ),
+                              )
+                            ),
+                          ),
+                          onDragStarted: () {
+                            Provider.of<PlanDragStateProvider>(context, listen: false).moveStart();
+                          },
+                          onDragEnd: (details) {
+                            Provider.of<PlanDragStateProvider>(context, listen: false).moveEnd();
+                          },
                         );
                       }
                     },

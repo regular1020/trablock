@@ -18,7 +18,7 @@ class AddPlanView extends StatelessWidget {
     SelectedTravelProvider provider = Provider.of<SelectedTravelProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text("${travel.destination}여행 새 일정 추가"),
+        title: const Text("일정 관리"),
         actions: [
           IconButton(
             onPressed: () {

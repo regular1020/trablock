@@ -49,7 +49,7 @@ class _PlaceListState extends State<PlaceList> {
                     ),
                   ),
                   footer: SizedBox(
-                    height: MediaQuery.of(context).size.height*0.95-(158*assignedPlaces[day-1].length) > 0? MediaQuery.of(context).size.height*0.95-(158*assignedPlaces[day-1].length) : 0,
+                    height: MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) > 0? MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) : 0,
                     child: DragTarget<Place>(
                       builder: (context, candidateData, rejectedData) {
                         return Container();
@@ -60,60 +60,45 @@ class _PlaceListState extends State<PlaceList> {
                     ),
                   ),
                   children: <Widget>[
-                    if (assignedPlaces[day-1].isEmpty)
-                      Container(
-                        key: const Key('0'),
-                        child: DragTarget<Place>(
-                          builder: (context, candidatePlace, rejectedPlaces) {
-                            return Container(
-                              height: MediaQuery.of(context).size.height * 0.8,
-                            );
-                          },
-                          onAccept: (place) {
-                            provider.insertPlace(place, day-1);
-                          },
+                    for (int placeIndex = 0; placeIndex < assignedPlaces[day-1].length; placeIndex++)
+                      SizedBox(
+                        key: Key('$placeIndex'),
+                        height: 150,
+                        child: Stack(
+                          children: [
+                            PlaceBlock(day: day, placeIndex: placeIndex,),
+                            DragTarget<Place>(
+                              builder:
+                                  (context, candidatePlace, rejectedPlace) {
+                                return Container(
+                                  height: 75,
+                                );
+                              },
+                              onAccept: (place) {
+                                provider.insertPlaceAtUpperHalf(place, day-1, placeIndex);
+                              },
+                            ),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 75,
+                                ),
+                                DragTarget<Place>(
+                                  builder:
+                                      (context, candidatePlace, rejectedPlace) {
+                                    return Container(
+                                      height: 75,
+                                    );
+                                  },
+                                  onAccept: (place) {
+                                    provider.insertPlaceAtLowerHalf(place, day-1, placeIndex);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       )
-                    else
-                      for (int placeIndex = 0; placeIndex < assignedPlaces[day-1].length; placeIndex++)
-                        SizedBox(
-                          key: Key('$placeIndex'),
-                          height: 150,
-                          child: Stack(
-                            children: [
-                              PlaceBlock(day: day, placeIndex: placeIndex,),
-                              DragTarget<Place>(
-                                builder:
-                                    (context, candidatePlace, rejectedPlace) {
-                                  return Container(
-                                    height: 75,
-                                  );
-                                },
-                                onAccept: (place) {
-                                  provider.insertPlaceAtUpperHalf(place, day-1, placeIndex);
-                                },
-                              ),
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 75,
-                                  ),
-                                  DragTarget<Place>(
-                                    builder:
-                                        (context, candidatePlace, rejectedPlace) {
-                                      return Container(
-                                        height: 75,
-                                      );
-                                    },
-                                    onAccept: (place) {
-                                      provider.insertPlaceAtLowerHalf(place, day-1, placeIndex);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
                   ],
                 ),
               );
