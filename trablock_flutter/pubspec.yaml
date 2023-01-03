@@ -44,6 +44,12 @@ dependencies:
   mockito: ^5.3.2
   flutter_secure_storage: ^6.0.0
   cloud_firestore: ^4.0.5
+  syncfusion_flutter_datepicker: ^20.3.59
+  carousel_slider: ^4.2.0
+  cloud_firestore_odm: ^1.0.0-dev.43
+  json_annotation: ^4.7.0
+  reorderables: ^0.5.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +61,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.2
+  cloud_firestore_odm_generator: ^1.0.0-dev.43
+  json_serializable: ^6.5.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

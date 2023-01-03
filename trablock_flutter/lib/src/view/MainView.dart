@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
+import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
+import 'package:trablock_flutter/src/view/AddTravelView.dart';
+import 'package:trablock_flutter/src/view/TravelInfoView.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -15,7 +18,10 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<TravelProvider>(context, listen: false).readTravelFromDB(Provider.of<UserProvider>(context, listen: false).id!);
+      TravelProvider travelProvider = Provider.of<TravelProvider>(context, listen: false);
+      if (travelProvider.travels.isEmpty) {
+        travelProvider.readTravelFromFireStore(Provider.of<UserProvider>(context, listen: false).id!);
+      }
     });
     super.initState();
   }
@@ -32,15 +38,15 @@ class _MainViewState extends State<MainView> {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
               child: Text(
                 "메뉴",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30
+                    color: Colors.white,
+                    fontSize: 30
                 ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
               ),
             ),
             ListTile(
@@ -61,7 +67,7 @@ class _MainViewState extends State<MainView> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          // Todo : Navigate to add travel view
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddTravelView()));
         }
       ),
       body: Column(
@@ -91,7 +97,7 @@ class _MainViewState extends State<MainView> {
                             child: Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "${travels[index].destination} 여행",
+                                "${travels[index].destination}",
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 30
@@ -103,7 +109,7 @@ class _MainViewState extends State<MainView> {
                             child: Container()
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 5),
+                            padding: const EdgeInsets.only(right: 8),
                             child: Text(
                               "여행인원 : ${travels[index].numberOfPeople.toString()}명",
                               style: const TextStyle(
@@ -113,11 +119,20 @@ class _MainViewState extends State<MainView> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0, bottom: 5),
+                            padding: const EdgeInsets.only(right: 8.0),
                             child: Text(
-                              "출발일자 : ${travels[index].period.split(":")[0]}",
+                              "출발일자 : ${travels[index].period.split("-")[0]}",
                               style: const TextStyle(
                                 color: Colors.white
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0, bottom: 5),
+                            child: Text(
+                              "도착일자 : ${travels[index].period.split("-")[1]}",
+                              style: const TextStyle(
+                                  color: Colors.white
                               ),
                             ),
                           ),
@@ -125,6 +140,8 @@ class _MainViewState extends State<MainView> {
                       ),
                     ),
                     onTap: () {
+                      Provider.of<SelectedTravelProvider>(context, listen: false).selectTravel(travels[index]);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TravelInfoView()));
                       // ToDo : Navigate to travel plan view
                     },
                   ),

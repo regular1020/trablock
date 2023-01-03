@@ -12,9 +12,6 @@ class NickNameSettingView extends StatefulWidget {
 class _NickNameSettingViewState extends State<NickNameSettingView> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<UserProvider>(context, listen: false).checkID();
-    });
     super.initState();
   }
 

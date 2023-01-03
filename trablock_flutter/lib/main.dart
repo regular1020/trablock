@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trablock_flutter/src/provider/AddPlanViewProvider.dart';
 import 'package:trablock_flutter/src/provider/AuthProvider.dart';
+import 'package:trablock_flutter/src/provider/PlanDragStateProvider.dart';
+import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
 import 'package:trablock_flutter/src/view/RoutingView.dart';
@@ -20,18 +23,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Trablock',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: MultiProvider(
+    return MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
           ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-          ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider())
+          ChangeNotifierProvider<TravelProvider>(create: (_) => TravelProvider()),
+          ChangeNotifierProvider<SelectedTravelProvider>(create: (_) => SelectedTravelProvider()),
+          ChangeNotifierProvider<PlanDragStateProvider>(create: (_) => PlanDragStateProvider()),
+          ChangeNotifierProvider<AddPlanViewProvider>(create: (_) => AddPlanViewProvider()),
         ],
-        child: RoutingView(),
+        child: MaterialApp(
+          title: 'Trablock',
+          theme: ThemeData(
+            primarySwatch: Colors.blueGrey,
+          ),
+          home: const RoutingView(),
       )
     );
   }
