@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 import 'package:trablock_flutter/src/provider/AddPlanViewProvider.dart';
@@ -9,6 +10,8 @@ class AddPlanView extends StatelessWidget {
   AddPlanView({super.key});
 
   final TextEditingController _planNameController = TextEditingController();
+  final TextEditingController _planStartHourController = TextEditingController();
+  final TextEditingController _planStartMinuteController = TextEditingController();
   final TextEditingController _planHourController = TextEditingController();
   final TextEditingController _planMinuteController = TextEditingController();
 
@@ -53,7 +56,15 @@ class AddPlanView extends StatelessWidget {
                   _planMinuteController.text = "0";
                   return;
                 }
-                provider.addNewPlace(_planNameController.text, int.parse(_planHourController.text), int.parse(_planMinuteController.text), Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue!);
+                int? startHour;
+                int? startMinute;
+                if (_planStartHourController.text != "") {
+                  startHour = int.parse(_planStartHourController.text);
+                }
+                if (_planStartMinuteController.text != "") {
+                  startMinute = int.parse(_planStartMinuteController.text);
+                }
+                provider.addNewPlace(_planNameController.text, int.parse(_planHourController.text), int.parse(_planMinuteController.text), Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue!, startHour, startMinute);
                 Navigator.pop(context);
               }
             }, 
@@ -80,11 +91,39 @@ class AddPlanView extends StatelessWidget {
             padding: const EdgeInsets.all(9.0),
             child: Row(
               children: [
+                const Text("시작시간 : "),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width*0.2,
+                    child: TextField(
+                      controller: _planStartHourController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                  ),
+                  const Text("시"),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.2,
+                    child: TextField(
+                      controller: _planStartMinuteController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                  ),
+                  const Text("분"),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: Row(
+              children: [
                 const Text("소요시간 : "),
                 SizedBox(
                   width: MediaQuery.of(context).size.width*0.2,
                   child: TextField(
                     controller: _planHourController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 const Text("시간"),
@@ -92,6 +131,8 @@ class AddPlanView extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.2,
                   child: TextField(
                     controller: _planMinuteController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 const Text("분"),

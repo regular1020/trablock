@@ -45,16 +45,21 @@ class _TravelInfoViewState extends State<TravelInfoView> {
       body: Column(
         children: [
           Container(
-            color: Colors.blueGrey.withOpacity(0.3),
+            color: Colors.blueGrey.withOpacity(0.5),
             height: MediaQuery.of(context).size.height*0.05,
             width: MediaQuery.of(context).size.width,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("${Provider.of<SelectedTravelProvider>(context).travel.destination} 여행"),
+              child: Text(
+                "${Provider.of<SelectedTravelProvider>(context).travel.destination} 여행",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold
+                ),
+              ),
             ),
           ),
           Container(
-            color: Colors.blueGrey.withOpacity(0.3),
+            color: Colors.blueGrey.withOpacity(0.5),
             height: MediaQuery.of(context).size.height*0.05,
             width: MediaQuery.of(context).size.width,
             child: Padding(
@@ -65,12 +70,12 @@ class _TravelInfoViewState extends State<TravelInfoView> {
           Expanded(
             child: Row(
               children: [
-                PlaceList(),
+                const PlaceList(),
                 Container(
                   width: 3,
                   color: Colors.black,
                 ),
-                LeftPlaceList(),
+                const LeftPlaceList(),
               ],
             ),
           ),
@@ -78,12 +83,12 @@ class _TravelInfoViewState extends State<TravelInfoView> {
           Container(
             height: MediaQuery.of(context).size.height*0.1,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.red
             ),
             child: DragTarget<Place>(
               builder: (context, candidateData, rejectedData) {
-                return Icon(Icons.delete);
+                return const Icon(Icons.delete);
               },
               onAccept: (place) {
                 Provider.of<SelectedTravelProvider>(context, listen: false).deletePlace(place);

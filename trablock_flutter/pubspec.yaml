@@ -49,6 +49,7 @@ dependencies:
   cloud_firestore_odm: ^1.0.0-dev.43
   json_annotation: ^4.7.0
   reorderables: ^0.5.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

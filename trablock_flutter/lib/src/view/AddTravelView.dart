@@ -207,7 +207,7 @@ class _AddTravelViewState extends State<AddTravelView> {
             ),
             SfDateRangePicker(
               onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                _travelPeriod = '${DateFormat('yyyy/MM/dd').format(args.value.startDate)} - ${DateFormat('yyyy/MM/dd').format(args.value.endDate ?? args.value.startDate)}';
+                _travelPeriod = '${DateFormat('yyyy/MM/dd').format(args.value.startDate)}-${DateFormat('yyyy/MM/dd').format(args.value.endDate ?? args.value.startDate)}';
                 if (args.value.endDate != null) {
                   _usedDate = args.value.endDate.difference(args.value.startDate).inDays + 1;
                 }

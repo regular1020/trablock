@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:trablock_flutter/src/model/PlaceModel.dart';
@@ -40,30 +39,44 @@ class _PlaceListState extends State<PlaceList> {
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height*0.05,
-                      child: Text(
-                        "$day일차",
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "$day일차",
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 10,),
+                          Text(DateFormat("yyyy/MM/dd").format(DateFormat("yyyy/MM/dd").parse(_travel.period.split("-")[0]).add(Duration(days: day-1)))),
+                        ],
                       ),
                     ),
                   ),
-                  footer: SizedBox(
-                    height: MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) > 0? MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) : 0,
-                    child: DragTarget<Place>(
-                      builder: (context, candidateData, rejectedData) {
-                        return Container();
-                      },
-                      onAccept: (place) {
-                        provider.insertPlace(place, day-1);
-                      },
-                    ),
+                  footer: Column(
+                    children: [
+                      Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) > 0? MediaQuery.of(context).size.height*0.8-(150*assignedPlaces[day-1].length) : 0,
+                        child: DragTarget<Place>(
+                          builder: (context, candidateData, rejectedData) {
+                            return Container();
+                          },
+                          onAccept: (place) {
+                            provider.insertPlace(place, day-1);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   children: <Widget>[
                     for (int placeIndex = 0; placeIndex < assignedPlaces[day-1].length; placeIndex++)
                       SizedBox(
                         key: Key('$placeIndex'),
-                        height: 150,
+                        height: 100,
                         child: Stack(
                           children: [
                             PlaceBlock(day: day, placeIndex: placeIndex,),
@@ -71,7 +84,7 @@ class _PlaceListState extends State<PlaceList> {
                               builder:
                                   (context, candidatePlace, rejectedPlace) {
                                 return Container(
-                                  height: 75,
+                                  height: 50,
                                 );
                               },
                               onAccept: (place) {
@@ -81,13 +94,13 @@ class _PlaceListState extends State<PlaceList> {
                             Column(
                               children: [
                                 const SizedBox(
-                                  height: 75,
+                                  height: 50,
                                 ),
                                 DragTarget<Place>(
                                   builder:
                                       (context, candidatePlace, rejectedPlace) {
                                     return Container(
-                                      height: 75,
+                                      height: 50,
                                     );
                                   },
                                   onAccept: (place) {

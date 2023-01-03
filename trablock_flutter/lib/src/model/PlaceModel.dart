@@ -5,11 +5,13 @@ class Place {
   late String name;
   late int hour;
   late int minute;
+  late int? startHour;
+  late int? startMinute;
   late int dateOfVisit;
   late int index;
   late String category;
 
-  Place({required this.id, required this.name, required this.hour, required this.minute, required this.dateOfVisit, required this.index, required this.category});
+  Place({required this.id, required this.name, required this.hour, required this.minute, required this.dateOfVisit, required this.index, required this.category, required this.startHour, required this.startMinute});
 
   factory Place.fromDocument(DocumentSnapshot documentSnapshot) {
     return Place(
@@ -19,7 +21,9 @@ class Place {
       minute: documentSnapshot.get("minute"),
       dateOfVisit: documentSnapshot.get("date_of_visit"),
       index: documentSnapshot.get("index"),
-      category: documentSnapshot.get("category")
+      category: documentSnapshot.get("category"),
+      startHour: documentSnapshot.get("start_hour"),
+      startMinute: documentSnapshot.get("start_minute")
     );
   }
 }

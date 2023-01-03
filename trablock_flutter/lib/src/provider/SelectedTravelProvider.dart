@@ -35,18 +35,20 @@ class SelectedTravelProvider with ChangeNotifier {
     }
   }
 
-  void addNewPlace(String name, int hour, int minute, String category) {
+  void addNewPlace(String name, int hour, int minute, String category, int? startHour, int? startMinute) {
     final updates = <String, dynamic>{
       "date_of_visit": -1,
       "index": -1,
       "hour": hour,
       "minute": minute,
       "name": name,
-      "category": category
+      "category": category,
+      "start_hour": startHour,
+      "start_minute": startMinute,
     };
     _db.collection("place").add(updates).then((value) {
       _db.collection("travel").doc(_travel.id).update({"places": FieldValue.arrayUnion([value])});
-      Place place = Place(id: value.id ,name: name, hour: hour, minute: minute, dateOfVisit: -1, index: -1, category: category);
+      Place place = Place(id: value.id ,name: name, hour: hour, minute: minute, dateOfVisit: -1, index: -1, category: category, startHour: startHour, startMinute: startMinute);
       travel.places.add(place);
       unassignedPlaces.add(place);
       notifyListeners();
@@ -89,7 +91,6 @@ class SelectedTravelProvider with ChangeNotifier {
 
   void reorderPlace(int oldIndex, int newIndex, int dayIndex) {
     if (oldIndex < newIndex) {
-      newIndex -= 1;
       for (int i = oldIndex + 1; i <= newIndex; i++) {
         _assignedPlaces[dayIndex][i].index--;
       }

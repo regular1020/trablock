@@ -121,7 +121,7 @@ class _MainViewState extends State<MainView> {
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Text(
-                              "출발일자 : ${travels[index].period.split(" - ")[0]}",
+                              "출발일자 : ${travels[index].period.split("-")[0]}",
                               style: const TextStyle(
                                 color: Colors.white
                               ),
@@ -130,7 +130,7 @@ class _MainViewState extends State<MainView> {
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0, bottom: 5),
                             child: Text(
-                              "도착일자 : ${travels[index].period.split(" - ")[1]}",
+                              "도착일자 : ${travels[index].period.split("-")[1]}",
                               style: const TextStyle(
                                   color: Colors.white
                               ),
