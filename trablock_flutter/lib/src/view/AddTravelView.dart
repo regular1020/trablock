@@ -250,7 +250,6 @@ class _AddTravelViewState extends State<AddTravelView> {
                           return;
                         }
                         travelProvider.addTravelToFireStore(userProvider.id!, _selectedCity, int.parse(_numberOfPeopleTextEditingController.text), _travelPeriod, _usedDate);
-                        print("a");
                         Navigator.pop(context);
                       },
                       child: const Text("확인", style: TextStyle(color: Colors.white, fontSize: 20),)
