@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 import 'package:trablock_flutter/src/provider/AddPlanViewProvider.dart';
 import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
-import 'package:trablock_flutter/src/const/addPlanConsts';
+import 'package:trablock_flutter/src/const/addPlanConsts.dart';
 
 class AddPlanView extends StatelessWidget {
   AddPlanView({super.key});
