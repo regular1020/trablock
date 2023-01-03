@@ -14,17 +14,17 @@ class LeftPlaceList extends StatelessWidget {
   Color? getColor(Place place) {
     switch (place.category) {
       case "관광지":
-        return Colors.red.withOpacity(0.5);
+        return Colors.red.withOpacity(0.2);
       case "식당":
-        return Colors.blue.withOpacity(0.5);
+        return Colors.blue.withOpacity(0.2);
       case "이동":
-        return Colors.yellow.withOpacity(0.5);
+        return Colors.yellow.withOpacity(0.2);
       case "숙소":
-        return Colors.green.withOpacity(0.5);
+        return Colors.green.withOpacity(0.2);
       case "쇼핑":
-        return Colors.purple.withOpacity(0.5);
+        return Colors.purple.withOpacity(0.2);
       default:
-        return Colors.blueGrey.withOpacity(0.5);
+        return Colors.blueGrey.withOpacity(0.2);
     }
   }
 

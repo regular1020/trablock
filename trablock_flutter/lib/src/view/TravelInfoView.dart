@@ -33,38 +33,48 @@ class _TravelInfoViewState extends State<TravelInfoView> {
     unassignedPlaces = Provider.of<SelectedTravelProvider>(context).unassignedPlaces;
     assignedPlaces = Provider.of<SelectedTravelProvider>(context).assignedPlaces;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _travel.places.forEach((element) {
-            Provider.of<TravelProvider>(context, listen: false)
-                .saveChangeToFireStore(element);
-          });
-        },
-        child: const Icon(Icons.save),
-      ),
       body: Column(
         children: [
           Container(
-            color: Colors.blueGrey.withOpacity(0.5),
-            height: MediaQuery.of(context).size.height*0.05,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "${Provider.of<SelectedTravelProvider>(context).travel.destination} 여행",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold
+            color: Colors.blueGrey.withOpacity(0.8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "${Provider.of<SelectedTravelProvider>(context).travel.destination} 여행",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(Provider.of<SelectedTravelProvider>(context).travel.period),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.blueGrey.withOpacity(0.5),
-            height: MediaQuery.of(context).size.height*0.05,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(Provider.of<SelectedTravelProvider>(context).travel.period),
+                IconButton(
+                  onPressed: () {
+                    _travel.places.forEach((element) {
+                    Provider.of<TravelProvider>(context, listen: false)
+                        .saveChangeToFireStore(element);
+                  });
+                  }, 
+                  icon: const Icon(Icons.save)
+                )
+              ],
             ),
           ),
           Expanded(

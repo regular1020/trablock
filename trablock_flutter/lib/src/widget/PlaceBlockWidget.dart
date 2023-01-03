@@ -37,16 +37,6 @@ class PlaceBlock extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              if(place.startHour != null && place.startMinute.toString().length == 2)
-                Expanded(
-                  child: Text("${place.startHour}:${place.startMinute}"),
-                )
-              else if (place.startHour != null)
-                Expanded(
-                  child: Text("${place.startHour}:0${place.startMinute}")
-                )
-              else
-                Expanded(child: Container()),
               Container(
                   width: MediaQuery.of(context).size.width*0.6,
                   decoration: BoxDecoration(
@@ -56,7 +46,7 @@ class PlaceBlock extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top : 4, left: 4),
+                        padding: const EdgeInsets.only(left: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -78,7 +68,7 @@ class PlaceBlock extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top : 4, left : 4.0),
+                        padding: const EdgeInsets.only(left : 4.0),
                         child: Row(
                           children: [
                             Text(
@@ -94,10 +84,24 @@ class PlaceBlock extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left : 4.0),
+                        child: Text(place.memo, style: const TextStyle(color: Colors.black54),),
                       )
                     ],
                   )
                 ),
+              if(place.startHour != null && place.startMinute.toString().length == 2)
+                Expanded(
+                  child: Text("${place.startHour}:${place.startMinute}"),
+                )
+              else if (place.startHour != null)
+                Expanded(
+                  child: Text("${place.startHour}:0${place.startMinute}")
+                )
+              else
+                Expanded(child: Container()),
             ],
           ),
         ),

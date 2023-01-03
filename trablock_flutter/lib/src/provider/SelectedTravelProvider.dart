@@ -35,7 +35,7 @@ class SelectedTravelProvider with ChangeNotifier {
     }
   }
 
-  void addNewPlace(String name, int hour, int minute, String category, int? startHour, int? startMinute) {
+  void addNewPlace(String name, int hour, int minute, String category, int? startHour, int? startMinute, String memo) {
     final updates = <String, dynamic>{
       "date_of_visit": -1,
       "index": -1,
@@ -45,10 +45,11 @@ class SelectedTravelProvider with ChangeNotifier {
       "category": category,
       "start_hour": startHour,
       "start_minute": startMinute,
+      "memo": memo,
     };
     _db.collection("place").add(updates).then((value) {
       _db.collection("travel").doc(_travel.id).update({"places": FieldValue.arrayUnion([value])});
-      Place place = Place(id: value.id ,name: name, hour: hour, minute: minute, dateOfVisit: -1, index: -1, category: category, startHour: startHour, startMinute: startMinute);
+      Place place = Place(id: value.id ,name: name, hour: hour, minute: minute, dateOfVisit: -1, index: -1, category: category, startHour: startHour, startMinute: startMinute, memo: memo);
       travel.places.add(place);
       unassignedPlaces.add(place);
       notifyListeners();
