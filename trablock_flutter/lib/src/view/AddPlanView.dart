@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +16,14 @@ class AddPlanView extends StatelessWidget {
   final TextEditingController _planHourController = TextEditingController();
   final TextEditingController _planMinuteController = TextEditingController();
   final TextEditingController _planMemoController = TextEditingController();
+  final TextEditingController _planCostController = TextEditingController();
+
+  late String _currency;
 
   @override
   Widget build(BuildContext context) {
-    Travel travel = Provider.of<SelectedTravelProvider>(context).travel;
     SelectedTravelProvider provider = Provider.of<SelectedTravelProvider>(context, listen: false);
+    _currency = Provider.of<AddPlanViewProvider>(context).currencyCode;
     return Scaffold(
       appBar: AppBar(
         title: const Text("일정 관리"),
@@ -46,8 +50,6 @@ class AddPlanView extends StatelessWidget {
                     ],
                   ))
                 );
-              } else if (Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue == null) {
-
               } else {
                 if (_planHourController.text == "") {
                   _planHourController.text = "0";
@@ -72,7 +74,9 @@ class AddPlanView extends StatelessWidget {
                   Provider.of<AddPlanViewProvider>(context, listen: false).dropDownValue!, 
                   startHour, 
                   startMinute,
-                  _planMemoController.text
+                  _planMemoController.text,
+                  _currency,
+                  int.parse(_planCostController.text)
                 );
                 Navigator.pop(context);
               }
@@ -146,6 +150,33 @@ class AddPlanView extends StatelessWidget {
                     ),
                   ),
                   const Text("분"),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(9.0),
+              child: Row(
+                children: [
+                  const Text("지출 : "),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.2,
+                    child: TextField(
+                      controller: _planCostController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showCurrencyPicker(
+                          context: context,
+                          onSelect:(currency) {
+                            Provider.of<AddPlanViewProvider>(context, listen: false).setCurrencyCode(currency.code);
+                          },
+                      );
+                    },
+                    child: Text(_currency)
+                  )
                 ],
               ),
             ),

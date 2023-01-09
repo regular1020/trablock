@@ -11,6 +11,8 @@ class Place {
   late int index;
   late String category;
   late String memo;
+  late String currency;
+  late int cost;
 
   Place({
     required this.id, 
@@ -23,6 +25,8 @@ class Place {
     required this.startHour, 
     required this.startMinute,
     required this.memo,
+    required this.currency,
+    required this.cost,
   });
 
   factory Place.fromDocument(DocumentSnapshot documentSnapshot) {
@@ -37,6 +41,8 @@ class Place {
       startHour: documentSnapshot.get("start_hour"),
       startMinute: documentSnapshot.get("start_minute"),
       memo: documentSnapshot.get("memo"),
+      currency: documentSnapshot.get("currency"),
+      cost: documentSnapshot.get("cost"),
     );
   }
 }
