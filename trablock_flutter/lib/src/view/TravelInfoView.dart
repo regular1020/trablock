@@ -36,7 +36,7 @@ class _TravelInfoViewState extends State<TravelInfoView> {
       body: Column(
         children: [
           Container(
-            color: Colors.blueGrey.withOpacity(0.8),
+            color: Colors.grey.withOpacity(0.8),
             child: Row(
               children: [
                 Expanded(

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Trablock',
           theme: ThemeData(
-            primarySwatch: Colors.blueGrey,
+            primarySwatch: Colors.grey,
           ),
           home: const RoutingView(),
       )

@@ -1,9 +1,13 @@
 import 'package:currency_picker/currency_picker.dart';
+import 'package:flag/flag.dart';
+import 'package:flag/flag_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:trablock_flutter/main.dart';
 import 'package:trablock_flutter/src/method/DialogMethod.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
@@ -29,6 +33,7 @@ class _AddTravelViewState extends State<AddTravelView> {
   Widget build(BuildContext context) {
     travelProvider = Provider.of<TravelProvider>(context,listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool? displayFlagPicker;
 
     return Scaffold(
       appBar: AppBar(
@@ -54,8 +59,8 @@ class _AddTravelViewState extends State<AddTravelView> {
               )
             ),
             Container(
-              height: 3,
-              color: Colors.blueGrey,
+              height: 1,
+              color: Colors.black,
             ),
             const Padding(
               padding: EdgeInsets.all(8.0),
@@ -93,8 +98,8 @@ class _AddTravelViewState extends State<AddTravelView> {
               ],
             ),
             Container(
-              height: 3,
-              color: Colors.blueGrey,
+              height: 1,
+              color: Colors.black,
             ),
             const Padding(
               padding: EdgeInsets.all(8.0),
@@ -115,15 +120,15 @@ class _AddTravelViewState extends State<AddTravelView> {
               selectionMode: DateRangePickerSelectionMode.range,
             ),
             Container(
-              height: 3,
-              color: Colors.blueGrey,
+              height: 1,
+              color: Colors.black,
             ),
             Padding(
               padding: const EdgeInsets.all(8),
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.blueGrey,
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(15)
                   ),
                   height: MediaQuery.of(context).size.height*0.08,
@@ -145,7 +150,7 @@ class _AddTravelViewState extends State<AddTravelView> {
                         travelProvider.addTravelToFireStore(userProvider.id!, _destinationTextEditingController.text, int.parse(_numberOfPeopleTextEditingController.text), _travelPeriod, _usedDate);
                         Navigator.pop(context);
                       },
-                      child: const Text("확인", style: TextStyle(color: Colors.white, fontSize: 20),)
+                      child: const Text("확인", style: TextStyle(color: Colors.black, fontSize: 20),)
                   ),
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trablock_flutter/src/model/TravelModel.dart';
@@ -31,7 +33,9 @@ class _MainViewState extends State<MainView> {
     List<Travel> travels = Provider.of<TravelProvider>(context).travels;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("내 여행"),
+        centerTitle: true,
       ),
       endDrawer: Drawer(
         child: ListView(
@@ -39,15 +43,21 @@ class _MainViewState extends State<MainView> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blueGrey,
+                color: Colors.grey,
               ),
               child: Text(
                 "메뉴",
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 30
                 ),
               ),
+            ),
+            ListTile(
+              title: const Text("새 여행"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddTravelView()));
+              },
             ),
             ListTile(
               title: const Text("내 정보"),
@@ -64,12 +74,6 @@ class _MainViewState extends State<MainView> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddTravelView()));
-        }
-      ),
       body: Column(
         children: [
           Expanded(
@@ -77,7 +81,7 @@ class _MainViewState extends State<MainView> {
               itemCount: travels.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1 / 1,
+                childAspectRatio: 1 / 1.3,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
               ),
@@ -87,8 +91,13 @@ class _MainViewState extends State<MainView> {
                   child: InkWell(
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(20)
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+
+                            )
+                          ]
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,23 +106,25 @@ class _MainViewState extends State<MainView> {
                             child: Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "${travels[index].destination}",
+                                travels[index].destination,
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 30
                                 ),
                               ),
                             ),
                           ),
                           Expanded(
-                            child: Container()
+                            child: Center(
+                              child: Icon(Icons.airplanemode_on_outlined, color: Colors.primaries[Random().nextInt(Colors.primaries.length)], size: 100),
+                            )
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: Text(
                               "여행인원 : ${travels[index].numberOfPeople.toString()}명",
                               style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 15
                               ),
                             ),
@@ -123,7 +134,7 @@ class _MainViewState extends State<MainView> {
                             child: Text(
                               "출발일자 : ${travels[index].period.split("-")[0]}",
                               style: const TextStyle(
-                                color: Colors.white
+                                color: Colors.black
                               ),
                             ),
                           ),
@@ -132,7 +143,7 @@ class _MainViewState extends State<MainView> {
                             child: Text(
                               "도착일자 : ${travels[index].period.split("-")[1]}",
                               style: const TextStyle(
-                                  color: Colors.white
+                                  color: Colors.black
                               ),
                             ),
                           ),
