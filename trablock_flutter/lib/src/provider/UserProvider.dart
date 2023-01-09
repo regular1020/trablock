@@ -24,6 +24,7 @@ class UserProvider with ChangeNotifier {
       var doc = await db.collection("user").doc(_id).get();
       if (doc.exists) {
         _nickname = doc.get("nick");
+        storage.write(key: "nickname", value: _nickname);
         notifyListeners();
       }
     } catch (e) {
@@ -41,9 +42,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<int> getRoutingFlagFromUserInformation() async {
-    await readUserIDFromLocal();
-    await checkIDFromFirebase();
+  int getRoutingFlagFromUserInformation() {
     if (_id == null) {
       return 1;
     }

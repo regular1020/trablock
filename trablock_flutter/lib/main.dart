@@ -9,6 +9,7 @@ import 'package:trablock_flutter/src/provider/SelectedTravelProvider.dart';
 import 'package:trablock_flutter/src/provider/TravelProvider.dart';
 import 'package:trablock_flutter/src/provider/UserProvider.dart';
 import 'package:trablock_flutter/src/view/RoutingView.dart';
+import 'package:trablock_flutter/src/view/SplashView.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.grey,
           ),
-          home: const RoutingView(),
+          home: SplashView(),
       )
     );
   }

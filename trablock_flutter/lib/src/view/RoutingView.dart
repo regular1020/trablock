@@ -14,31 +14,30 @@ class RoutingView extends StatefulWidget {
 }
 
 class _RoutingViewState extends State<RoutingView> {
+  int? _flag;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       UserProvider provider = Provider.of<UserProvider>(context, listen: false);
+      await provider.readUserIDFromLocal();
+      await provider.checkIDFromFirebase();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Provider.of<UserProvider>(context, listen: false).getRoutingFlagFromUserInformation(),
-      builder: ((context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == 1) {
-            return LoginView();
-          }
-          if (snapshot.data == 2) {
-            return const NickNameSettingView();
-          }
-          return const MainView();
-        }
-        return const CircularProgressIndicator();
-      }),
-    );
+    _flag = Provider.of<UserProvider>(context).getRoutingFlagFromUserInformation();
+    if (_flag == null) {
+      return const CircularProgressIndicator();
+    }
+    if (_flag == 1) {
+      return LoginView();
+    }
+    if (_flag == 2) {
+      return NickNameSettingView();
+    }
+    return const MainView();
   }
 }
